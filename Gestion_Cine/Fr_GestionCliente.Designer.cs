@@ -281,6 +281,7 @@
             Name = "Fr_GestionCliente";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Gestión de Clientes";
+            Load += Fr_GestionCliente_Load_1;
             pnlTop.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();

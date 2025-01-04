@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BLL;
+using UI;
 
 namespace Gestion_Cine
 {
@@ -80,7 +81,12 @@ namespace Gestion_Cine
 
         private void gestorClientesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new Fr_GestionCliente().Show();  
+            new Fr_GestionCliente().Show();
+        }
+
+        private void membresiasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Fr_GestionMembresia().Show();
         }
     }
 }

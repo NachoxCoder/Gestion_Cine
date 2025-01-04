@@ -113,6 +113,7 @@
             membresiasToolStripMenuItem.Name = "membresiasToolStripMenuItem";
             membresiasToolStripMenuItem.Size = new Size(224, 26);
             membresiasToolStripMenuItem.Text = "Membresias";
+            membresiasToolStripMenuItem.Click += membresiasToolStripMenuItem_Click;
             // 
             // gestorClientesToolStripMenuItem
             // 

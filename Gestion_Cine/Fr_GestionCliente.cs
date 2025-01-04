@@ -23,10 +23,9 @@ namespace Gestion_Cine
             gestorCliente = new BLL_Cliente();
         }
 
-        private void Fr_GestionCliente_Load(object sender, EventArgs e)
+        private void Fr_GestionCliente_Load_1(object sender, EventArgs e)
         {
-            RefrescarGrilla(dgvClientes, gestorCliente.Consultar());
-            CargarClientes();
+            RefrescarGrilla(dgvClientes,gestorCliente.Consultar());
             btnEliminar.Enabled = false;
             btnModificar.Enabled = false;
             txtDNI.Enabled = true;
@@ -36,19 +35,6 @@ namespace Gestion_Cine
         {
             pDgv.DataSource = null;
             pDgv.DataSource = pOrigen;
-        }
-
-        private void CargarClientes()
-        {
-            try
-            {
-                dgvClientes.DataSource = null;
-                dgvClientes.DataSource = gestorCliente.Consultar();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
 
 
@@ -118,11 +104,11 @@ namespace Gestion_Cine
                 clienteSeleccionado.Direccion = txtDireccion.Text;
                 clienteSeleccionado.FechaNacimiento = dtpFechaNacimiento.Value;
 
-                if(gestorCliente.Modificar(clienteSeleccionado))
+                if (gestorCliente.Modificar(clienteSeleccionado))
                 {
                     MessageBox.Show("Cliente modificado correctamente");
                     //gestorBitacora.Log(usuarioActual, $"Se modificó el cliente: {clienteSeleccionado.NombreCompleto()}");
-                    CargarClientes();
+                    RefrescarGrilla(dgvClientes, gestorCliente.Consultar());
                     LimpiarFormulario();
                 }
             }
@@ -136,7 +122,7 @@ namespace Gestion_Cine
         {
             try
             {
-                if(!ValidarDatos()) return;
+                if (!ValidarDatos()) return;
 
                 BE_Cliente cliente = new BE_Cliente
                 {
@@ -153,7 +139,7 @@ namespace Gestion_Cine
 
                 MessageBox.Show("Cliente guardado correctamente");
                 //gestorBitacora.Log(usuarioActual, $"Se guardó el cliente: {clienteSeleccionado.NombreCompleto()}");
-                CargarClientes();
+                RefrescarGrilla(dgvClientes, gestorCliente.Consultar());
                 LimpiarFormulario();
             }
             catch (Exception ex)
@@ -164,17 +150,17 @@ namespace Gestion_Cine
 
         private void btnEliminar_Click_1(object sender, EventArgs e)
         {
-            if(clienteSeleccionado == null) return;
-            if(MessageBox.Show("Esta seguro que se desea eliminar al cliente: " +
+            if (clienteSeleccionado == null) return;
+            if (MessageBox.Show("Esta seguro que se desea eliminar al cliente: " +
                 $"{clienteSeleccionado.NombreCompleto()}?", "Eliminar cliente", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 try
                 {
-                    if(gestorCliente.Baja(clienteSeleccionado))
+                    if (gestorCliente.Baja(clienteSeleccionado))
                     {
                         MessageBox.Show("Cliente eliminado correctamente");
                         //gestorBitacora.Log(usuarioActual, $"Se eliminó el cliente: {clienteSeleccionado.NombreCompleto()}");
-                        CargarClientes();
+                        RefrescarGrilla(dgvClientes, gestorCliente.Consultar());
                         LimpiarFormulario();
                     }
                 }

@@ -13,7 +13,5 @@ namespace BE
         public DateTime FechaVenta { get; set; }
         public decimal Precio { get; set; }
         public string NumeroButaca { get; set; }
-        public virtual BE_Cliente Cliente { get; set; }
-        public virtual BE_Funcion Funcion { get; set; }
     }
 }
