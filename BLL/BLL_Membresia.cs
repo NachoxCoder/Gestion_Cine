@@ -22,7 +22,7 @@ namespace BLL
         {
             try
             {
-                var cliente = _gestorCliente.ObtnerporDNI(membresia.Cliente.DNI);
+                var cliente = _gestorCliente.ObtenerporDNI(membresia.Cliente.DNI);
                 if(cliente == null)
                 {
                     return false;
@@ -81,7 +81,7 @@ namespace BLL
 
         public List<BE_Membresia> ConsultarPorCliente(int idCliente)
         {
-            return _mapperMembresia.Consultar().Where(x => x.IdCliente == idCliente)
+            return _mapperMembresia.Consultar().Where(x => x.Cliente.ID == idCliente)
                 .OrderByDescending(x => x.FechaInicio).ToList();
         }
     }

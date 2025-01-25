@@ -8,32 +8,18 @@ using System.Xml.Serialization;
 
 namespace BE
 {
-    [XmlRoot("Membresia")]
-    public class BE_Membresia : BE_EntidadBase
+    public class BE_Membresia
     {
         public BE_Membresia()
         {
         }
-        [XmlElement("IdCliente")]
-        public int IdCliente { get; set; }
-
-        [XmlElement("FechaIncio")]
+        public int ID { get; set; }
         public DateTime FechaInicio { get; set; }
-
-        [XmlElement("FechaFin")]
         public DateTime FechaFin { get; set; }
-
-        [XmlElement("CostoMensual")]
         public decimal CostoMensual { get; set; }
-
-        [XmlElement("Tipo")]
         public TipoMembresia Tipo { get; set; }
-
-        [XmlElement("EstaActiva")]
         public bool EstaActiva { get; set; }
-
-        [XmlIgnore]
-        public virtual BE_Cliente Cliente { get; set; }
+        public BE_Cliente Cliente { get; set; }
     }
 
     public enum TipoMembresia

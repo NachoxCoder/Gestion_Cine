@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace BE
 {
-    public class BE_Funcion : BE_EntidadBase
+    public class BE_Funcion
     {
         public BE_Funcion() 
         { 
             Boletos = new List<BE_Boleto>();
+            EstaActiva = true;
         }
+
+        public int ID { get; set; }
         public int IdPelicula { get; set; }
         public DateTime FechaFuncion { get; set; }
         public TimeSpan HoraInicio { get; set; }
@@ -21,7 +26,7 @@ namespace BE
         public decimal Precio { get; set; }
         public virtual BE_Pelicula Pelicula { get; set; }
         public virtual BE_Sala Sala { get; set; }
-        public virtual ICollection<BE_Boleto> Boletos { get; set; }
+        public List<BE_Boleto> Boletos { get; set; }
 
         public string PeliculaTitulo ()
         {

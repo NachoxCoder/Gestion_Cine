@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    public class BE_BoletoFuncion : BE_EntidadBase
+    public class BE_BoletoFuncion
     {
         public int IdFuncion { get; set; }
         public int IdBoleto { get; set; }

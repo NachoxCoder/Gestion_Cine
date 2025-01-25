@@ -59,9 +59,8 @@ namespace Gestion_Cine
             }*/
         }
 
-        private void CargarForm<T>() where T : Form, new()
+        private void CargarForm(Form form)
         {
-            var form = new T();
             form.MdiParent = this;
             form.Show();
         }
@@ -81,12 +80,26 @@ namespace Gestion_Cine
 
         private void gestorClientesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new Fr_GestionCliente().Show();
+            var form = new Fr_GestionCliente();
+            CargarForm(form);
         }
 
         private void membresiasToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new Fr_GestionMembresia().Show();
+            var form = new Fr_GestionMembresia();
+            CargarForm(form);
+        }
+
+        private void boletosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new Fr_VentaBoletos();
+            CargarForm(form);
+        }
+
+        private void gestionDePeliculasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new Fr_GestionPeliculas();
+            CargarForm(form);
         }
     }
 }

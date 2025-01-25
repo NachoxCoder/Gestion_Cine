@@ -107,6 +107,7 @@
             boletosToolStripMenuItem.Name = "boletosToolStripMenuItem";
             boletosToolStripMenuItem.Size = new Size(224, 26);
             boletosToolStripMenuItem.Text = "Boletos";
+            boletosToolStripMenuItem.Click += boletosToolStripMenuItem_Click;
             // 
             // membresiasToolStripMenuItem
             // 
@@ -134,6 +135,7 @@
             gestionDePeliculasToolStripMenuItem.Name = "gestionDePeliculasToolStripMenuItem";
             gestionDePeliculasToolStripMenuItem.Size = new Size(303, 26);
             gestionDePeliculasToolStripMenuItem.Text = "Gestion de Peliculas y Funciones";
+            gestionDePeliculasToolStripMenuItem.Click += gestionDePeliculasToolStripMenuItem_Click;
             // 
             // gestionDeSalasToolStripMenuItem
             // 

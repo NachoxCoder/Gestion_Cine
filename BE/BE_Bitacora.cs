@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    public class BE_Bitacora : BE_EntidadBase
+    public class BE_Bitacora
     {
+        public int ID { get; set; }
         public DateTime Fecha { get; set; }
         public string Evento { get; set; }
         public BE_Empleado UsuarioEmpleado { get; set; }

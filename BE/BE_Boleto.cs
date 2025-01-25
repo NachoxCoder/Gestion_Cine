@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    public class BE_Boleto : BE_EntidadBase
+    public class BE_Boleto
     {
+        public int ID { get; set; }
         public int IdCliente { get; set; }
         public int IdFuncion { get; set; }
         public DateTime FechaVenta { get; set; }

@@ -25,10 +25,14 @@ namespace Gestion_Cine
 
         private void Fr_GestionCliente_Load_1(object sender, EventArgs e)
         {
-            RefrescarGrilla(dgvClientes,gestorCliente.Consultar());
+            //dgvClientes.SelectionChanged -= dgvClientes_SelectionChanged_1;
+            RefrescarGrilla(dgvClientes, gestorCliente.Consultar());
             btnEliminar.Enabled = false;
             btnModificar.Enabled = false;
             txtDNI.Enabled = true;
+            LimpiarFormulario();
+            dgvClientes.ClearSelection();
+            //dgvClientes.SelectionChanged += dgvClientes_SelectionChanged_1;
         }
 
         private void RefrescarGrilla(DataGridView pDgv, object pOrigen)
@@ -180,6 +184,12 @@ namespace Gestion_Cine
                 btnEliminar.Enabled = true;
                 btnModificar.Enabled = true;
             }
+        }
+
+        private void btnNuevoCliente_Click(object sender, EventArgs e)
+        {
+            txtDNI.Enabled = true;
+            LimpiarFormulario();
         }
     }
 }

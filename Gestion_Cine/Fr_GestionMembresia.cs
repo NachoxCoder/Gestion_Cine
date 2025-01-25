@@ -28,9 +28,10 @@ namespace UI
             gestorCliente = new BLL_Cliente();
             //gestorBitacora = new BLL_Bitacora();
             //usuarioActual = usuario;
+            this.Load += Fr_GestionMembresia_Load;
         }
 
-        private void Fr_GestionMembresia_Load(object sender, EventArgs e)
+        private void Fr_GestionMembresia_Load(object? sender, EventArgs e)
         {
             ConfigurarControles();
             CargarMembresias();
@@ -38,15 +39,8 @@ namespace UI
 
         private void ConfigurarControles()
         {
-            cmbTipoMembresia.DataSource = Enum.GetValues(typeof(TipoMembresia));
-            dgvMembresias.AutoGenerateColumns = false;
-            dgvMembresias.Columns.AddRange(new DataGridViewColumn[] {
-                new DataGridViewColumn{Name = "Cliente", DataPropertyName = "Cliente.NombreCompleto"},
-                new DataGridViewColumn{Name = "TipoMembresia", DataPropertyName = "Tipo"},
-                new DataGridViewColumn{Name = "FechaInicio", DataPropertyName = "FechaInicio"},
-                new DataGridViewColumn{Name = "FechaFin", DataPropertyName = "FechaFin"},
-                new DataGridViewCheckBoxColumn{Name = "Activa", DataPropertyName = "EstaActiva"},
-            });
+            var membresias = Enum.GetValues(typeof(TipoMembresia));
+            cmbTipoMembresia.DataSource = membresias;
         }
 
         private void CargarMembresias()
@@ -79,7 +73,7 @@ namespace UI
                     membresiaSeleccionada = new BE_Membresia();
                 }
 
-                membresiaSeleccionada.IdCliente = clienteSeleccionado.ID;
+                membresiaSeleccionada.Cliente.ID = clienteSeleccionado.ID;
                 membresiaSeleccionada.Tipo = (TipoMembresia)cmbTipoMembresia.SelectedItem;
                 membresiaSeleccionada.FechaInicio = dtpFechaInicio.Value;
                 membresiaSeleccionada.FechaFin = dtpFechaFin.Value;
@@ -133,7 +127,7 @@ namespace UI
                 return;
             }
 
-            clienteSeleccionado = gestorCliente.ObtnerporDNI(txtDNI.Text.Trim());
+            clienteSeleccionado = gestorCliente.ObtenerporDNI(txtDNI.Text.Trim());
 
             if (clienteSeleccionado == null)
             {
@@ -177,7 +171,6 @@ namespace UI
 
                 var nuevaMembresia = new BE_Membresia
                 {
-                    IdCliente = clienteSeleccionado.ID,
                     Cliente = clienteSeleccionado,
                     Tipo = (TipoMembresia)cmbTipoMembresia.SelectedItem
                 };

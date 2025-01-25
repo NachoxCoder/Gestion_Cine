@@ -42,7 +42,13 @@ namespace Mappers
 
             foreach (var membresia in membresias)
             {
-                membresia.Cliente = clientes.Find(x => x.ID == membresia.IdCliente);
+                BE_Cliente? clienteEncontrado;
+                clienteEncontrado = clientes.Find(x => x.ID == membresia.Cliente.ID);
+                if(clienteEncontrado == null)
+                {
+                    throw new Exception("No se encontro el cliente de la membresia" + membresia.ID);
+                }
+                membresia.Cliente = clienteEncontrado;
             }
             return membresias;
         }

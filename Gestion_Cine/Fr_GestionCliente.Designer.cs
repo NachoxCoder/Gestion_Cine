@@ -49,6 +49,7 @@
             label1 = new Label();
             btnModificar = new Button();
             dgvClientes = new DataGridView();
+            btnNuevoCliente = new Button();
             pnlTop.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvClientes).BeginInit();
@@ -82,9 +83,9 @@
             btnGuardar.BackColor = Color.FromArgb(10, 18, 80);
             btnGuardar.FlatStyle = FlatStyle.Flat;
             btnGuardar.ForeColor = Color.White;
-            btnGuardar.Location = new Point(12, 437);
+            btnGuardar.Location = new Point(115, 437);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(112, 40);
+            btnGuardar.Size = new Size(94, 40);
             btnGuardar.TabIndex = 2;
             btnGuardar.Text = "GUARDAR";
             btnGuardar.UseVisualStyleBackColor = false;
@@ -95,9 +96,9 @@
             btnEliminar.BackColor = Color.Red;
             btnEliminar.FlatStyle = FlatStyle.Flat;
             btnEliminar.ForeColor = Color.White;
-            btnEliminar.Location = new Point(153, 437);
+            btnEliminar.Location = new Point(318, 437);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(118, 40);
+            btnEliminar.Size = new Size(94, 40);
             btnEliminar.TabIndex = 3;
             btnEliminar.Text = "ELIMINAR";
             btnEliminar.UseVisualStyleBackColor = false;
@@ -244,9 +245,9 @@
             btnModificar.BackColor = Color.FromArgb(10, 18, 80);
             btnModificar.FlatStyle = FlatStyle.Flat;
             btnModificar.ForeColor = Color.White;
-            btnModificar.Location = new Point(300, 437);
+            btnModificar.Location = new Point(215, 437);
             btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(112, 40);
+            btnModificar.Size = new Size(97, 40);
             btnModificar.TabIndex = 6;
             btnModificar.Text = "MODIFICAR";
             btnModificar.UseVisualStyleBackColor = false;
@@ -255,21 +256,35 @@
             // dgvClientes
             // 
             dgvClientes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvClientes.Location = new Point(436, 70);
+            dgvClientes.Location = new Point(418, 70);
             dgvClientes.MultiSelect = false;
             dgvClientes.Name = "dgvClientes";
             dgvClientes.ReadOnly = true;
             dgvClientes.RowHeadersWidth = 51;
             dgvClientes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvClientes.Size = new Size(691, 407);
+            dgvClientes.Size = new Size(709, 407);
             dgvClientes.TabIndex = 7;
             dgvClientes.SelectionChanged += dgvClientes_SelectionChanged_1;
+            // 
+            // btnNuevoCliente
+            // 
+            btnNuevoCliente.BackColor = Color.FromArgb(10, 18, 80);
+            btnNuevoCliente.FlatStyle = FlatStyle.Flat;
+            btnNuevoCliente.ForeColor = Color.White;
+            btnNuevoCliente.Location = new Point(12, 437);
+            btnNuevoCliente.Name = "btnNuevoCliente";
+            btnNuevoCliente.Size = new Size(94, 40);
+            btnNuevoCliente.TabIndex = 8;
+            btnNuevoCliente.Text = "NUEVO";
+            btnNuevoCliente.UseVisualStyleBackColor = false;
+            btnNuevoCliente.Click += btnNuevoCliente_Click;
             // 
             // Fr_GestionCliente
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1139, 489);
+            Controls.Add(btnNuevoCliente);
             Controls.Add(dgvClientes);
             Controls.Add(btnModificar);
             Controls.Add(groupBox1);
@@ -315,5 +330,6 @@
         private DateTimePicker dtpFechaNacimiento;
         private Button btnModificar;
         private DataGridView dgvClientes;
+        private Button btnNuevoCliente;
     }
 }

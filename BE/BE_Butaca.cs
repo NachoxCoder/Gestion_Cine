@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-     public class BE_Butaca : BE_EntidadBase
+     public class BE_Butaca
     {
+        public int ID { get; set; }
         public BE_Sala Sala { get; set; }
         public string Fila { get; set; }
         public int Numero { get; set; }

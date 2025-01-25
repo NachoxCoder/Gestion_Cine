@@ -19,7 +19,7 @@ namespace BLL
 
         public bool Baja(BE_Cliente cliente)
         {
-            var clienteExistente = ObtnerporDNI(cliente.DNI);
+            var clienteExistente = ObtenerporDNI(cliente.DNI);
             if (clienteExistente == null)
             {
                 return false;
@@ -30,7 +30,7 @@ namespace BLL
 
         public bool Modificar(BE_Cliente cliente)
         {
-            var clienteExistente = ObtnerporDNI(cliente.DNI);
+            var clienteExistente = ObtenerporDNI(cliente.DNI);
             if (clienteExistente == null)
             {
                 return false;
@@ -44,7 +44,7 @@ namespace BLL
             return _mapperCliente.Consultar();
         }
 
-        public BE_Cliente ObtnerporDNI(string dni)
+        public BE_Cliente ObtenerporDNI(string dni)
         {
             return _mapperCliente.Consultar().FirstOrDefault(x => x.DNI == dni);
         }
