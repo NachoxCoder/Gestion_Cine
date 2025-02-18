@@ -25,14 +25,12 @@ namespace Gestion_Cine
 
         private void Fr_GestionCliente_Load_1(object sender, EventArgs e)
         {
-            //dgvClientes.SelectionChanged -= dgvClientes_SelectionChanged_1;
             RefrescarGrilla(dgvClientes, gestorCliente.Consultar());
             btnEliminar.Enabled = false;
             btnModificar.Enabled = false;
             txtDNI.Enabled = true;
             LimpiarFormulario();
             dgvClientes.ClearSelection();
-            //dgvClientes.SelectionChanged += dgvClientes_SelectionChanged_1;
         }
 
         private void RefrescarGrilla(DataGridView pDgv, object pOrigen)
@@ -145,6 +143,7 @@ namespace Gestion_Cine
                 //gestorBitacora.Log(usuarioActual, $"Se guardó el cliente: {clienteSeleccionado.NombreCompleto()}");
                 RefrescarGrilla(dgvClientes, gestorCliente.Consultar());
                 LimpiarFormulario();
+                txtDNI.Enabled = true;
             }
             catch (Exception ex)
             {

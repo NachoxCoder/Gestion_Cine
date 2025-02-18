@@ -24,19 +24,28 @@ namespace Mappers
 
         public void Alta(BE_Sala sala)
         {
-            List<BE_Sala> salas = _dalXml.LeerXml<BE_Sala>();
-            if (salas.Any(s => s.Nombre.Equals(sala.Nombre, StringComparison.OrdinalIgnoreCase)))
+            try
             {
-                throw new Exception("Ya existe una sala con ese nombre");
+                var salas = _dalXml.LeerXml<BE_Sala>();
+                if (salas.Any(s => s.Nombre == sala.Nombre))
+                {
+                    throw new Exception("Ya existe una sala con ese nombre");
+                }
+                sala.ID = salas.Any() ? salas.Max(x => x.ID) + 1 : 1;
+                salas.Add(sala);
+                _dalXml.GuardarXml(salas);
             }
-            sala.ID = salas.Any() ? salas.Max(x => x.ID) + 1 : 1;
-            salas.Add(sala);
-            _dalXml.GuardarXml(salas);
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
 
         public void Baja(BE_Sala sala)
         {
-            List<BE_Sala> salas = _dalXml.LeerXml<BE_Sala>();
+            var salas = _dalXml.LeerXml<BE_Sala>();
             var salaEncontrada = salas.Find(x => x.ID == sala.ID);
             if (salaEncontrada != null)
             {
@@ -47,21 +56,26 @@ namespace Mappers
 
         public void Modificar(BE_Sala sala)
         {
-            List<BE_Sala> salas = _dalXml.LeerXml<BE_Sala>();
+            var salas = _dalXml.LeerXml<BE_Sala>();
             var salaExistente = salas.Find(x => x.ID == sala.ID);
             if (salaExistente != null)
             {
-                var salaConMismoNombre = salas.FirstOrDefault(s => s.ID != sala.ID && 
-                                         s.Nombre.Equals(sala.Nombre,StringComparison.OrdinalIgnoreCase));
-
-                if(salaConMismoNombre != null)
-                {
-                    throw new Exception("Ya existe una sala con ese nombre");
-                }
-
                 salaExistente.Nombre = sala.Nombre;
                 salaExistente.Capacidad = sala.Capacidad;
                 salaExistente.Tiene3D = sala.Tiene3D;
+                _dalXml.GuardarXml(salas);
+            }
+        }
+
+        public void ModificarButaca(BE_Butaca butaca)
+        {
+            var salas = _dalXml.LeerXml<BE_Sala>();
+            var sala = salas.FirstOrDefault(x => x.Butacas.Any(b => b.ID == butaca.ID));
+
+            if(sala != null)
+            {
+                var butacaExistente = sala.Butacas.First(b => b.ID == butaca.ID);
+                butacaExistente.Disponible = butaca.Disponible;
                 _dalXml.GuardarXml(salas);
             }
         }

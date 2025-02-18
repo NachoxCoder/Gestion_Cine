@@ -22,6 +22,7 @@ namespace Mappers
         {
             var funciones = _dalXml.LeerXml<BE_Funcion>();
             funcion.ID = funciones.Any() ? funciones.Max(x => x.ID) + 1 : 1;
+            funcion.Pelicula = funcion.Pelicula;
             funciones.Add(funcion);
             _dalXml.GuardarXml(funciones);
         }
@@ -48,6 +49,7 @@ namespace Mappers
                 funcionEncontrada.HoraFin = funcion.HoraFin;
                 funcionEncontrada.Precio = funcion.Precio;
                 funcionEncontrada.EstaActiva = funcion.EstaActiva;
+                funcionEncontrada.Sala = funcion.Sala;
                 _dalXml.GuardarXml(funciones);
             }
         }
@@ -56,10 +58,10 @@ namespace Mappers
             return _dalXml.LeerXml<BE_Funcion>();
         }
 
-        public bool ValidarDisponibilidadButaca(int idFuncion, string numeroButaca)
+        public bool ValidarDisponibilidadButaca(int idFuncion, string fila, int numero)
         {
             var boletos = _dalXml.LeerXml<BE_Boleto>();
-            return !boletos.Any(x => x.IdFuncion == idFuncion && x.NumeroButaca == numeroButaca);
+            return !boletos.Any(x => x.Funcion.ID == idFuncion && x.Butacas.Any(b => b.Fila == fila && b.Numero == numero));
         }
     }
 }

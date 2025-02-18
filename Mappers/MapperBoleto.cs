@@ -29,18 +29,6 @@ namespace Mappers
             _dalXml.GuardarXml(boletos);
         }
 
-        public void Modificar(BE_Boleto boleto)
-        {
-            var boletos = _dalXml.LeerXml<BE_Boleto>();
-            var boletoEncontrado = boletos.Find(x => x.ID == boleto.ID);
-            if (boletoEncontrado != null)
-            {
-                boletoEncontrado.NumeroButaca = boleto.NumeroButaca;
-                boletoEncontrado.Precio = boleto.Precio;
-                _dalXml.GuardarXml(boletos);
-            }
-        }
-
         public List<BE_Boleto> Consultar()
         {
             var boletos = _dalXml.LeerXml<BE_Boleto>();

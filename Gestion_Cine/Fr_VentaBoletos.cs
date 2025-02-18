@@ -36,37 +36,31 @@ namespace UI
             //gestorBitacora = new BLL_Bitacora();
             gestorBoleto = new BLL_Boleto();
             //usuarioActual = usuario;
+            this.Load += Fr_VentaBoletos_Load;
         }
 
         private void Fr_VentaBoletos_Load(object sender, EventArgs e)
         {
+            peliculaSeleccionada = dgvPeliculas.CurrentRow?.DataBoundItem as BE_Pelicula;
             CargarPeliculasDisponibles();
-            ConfigurarDgvFunciones();
-            CargarEstadoInicial();
+            CargarFuncionesDisponibles(peliculaSeleccionada);
+            CargarMetodosPago();
         }
 
         private void CargarFuncionesDisponibles(BE_Pelicula pelicula)
         {
-            var funciones = gestorFuncion.ConsultarFuncionesPorPelicula(pelicula.ID);
-            dgvFunciones.DataSource = funciones;
-            ConfigurarDgvFunciones();
-        }
-
-        private void ConfigurarDgvFunciones()
-        {
-            dgvFunciones.Columns.Clear();
-            dgvFunciones.AutoGenerateColumns = false;
-
-            dgvFunciones.Columns.AddRange(new DataGridViewColumn[]
+            if (pelicula == null)
             {
-                new DataGridViewTextBoxColumn { Name = "PeliculaTitulo", DataPropertyName = "PeliculaTitulo", HeaderText = "Película" },
-                new DataGridViewTextBoxColumn { Name = "SalaNomnbre", DataPropertyName = "SalaNombre", HeaderText = "Sala" },
-                new DataGridViewTextBoxColumn { Name = "ButacasDisponibles", DataPropertyName = "AsientosDisponibles", HeaderText = "Butacas Disponibles" },
-                new DataGridViewTextBoxColumn { Name = "Fecha", DataPropertyName = "Fecha", HeaderText = "Fecha" },
-                new DataGridViewTextBoxColumn { Name = "Hora", DataPropertyName = "Hora", HeaderText = "Hora" },
-                new DataGridViewTextBoxColumn { Name = "Precio", DataPropertyName = "Precio", HeaderText = "Precio" }
-            });
+                return;
+            }
+
+            var funciones = gestorFuncion.ConsultarFuncionesPorPelicula(pelicula)
+                .Where(f => f.AsientosDisponibles() > 0 && f.FechaFuncion >= DateTime.Today)
+                .OrderBy(f => f.FechaFuncion).ThenBy(f => f.HoraInicio).ToList();
+
+            dgvFunciones.DataSource = funciones;
         }
+
 
         private void AbrirFrRegistroCliente()
         {
@@ -80,33 +74,55 @@ namespace UI
             if (dgvFunciones.CurrentRow != null)
             {
                 funcionSeleccionada = (BE_Funcion)dgvFunciones.CurrentRow.DataBoundItem;
-                CargarButacasDisponibles();
+
+                lstBxButacasSeleccionadas.Items.Clear();
+
+                CargarButacasDisponibles(funcionSeleccionada);
+
+                ActualizarTotal();
             }
 
         }
 
-        private void CargarButacasDisponibles()
+        private void CargarButacasDisponibles(BE_Funcion funcionSeleccionada)
         {
-            if (funcionSeleccionada != null)
-            {
-                var butacasDisponibles = gestorButaca.ConsultarButacasDisponibles(funcionSeleccionada.IdSala);
-                panelButacas.Controls.Clear();
+            panelButacas.Controls.Clear();
 
-                foreach (var butaca in butacasDisponibles.OrderBy(b => b.Fila).ThenBy(b => b.Numero))
+            if (funcionSeleccionada == null || funcionSeleccionada.Sala == null)
+            {
+                return;
+            }
+            try
+            {
+                var boletosExistentes = gestorBoleto.Consultar().Where(x => x.Funcion.ID == funcionSeleccionada.ID).ToList();
+
+                var butacasOcupadas = boletosExistentes.SelectMany(x => x.Butacas).Select(b => new { b.Fila, b.Numero }).ToList();
+
+
+                foreach (var butaca in funcionSeleccionada.Sala.Butacas.OrderBy(b => b.Fila).ThenBy(b => b.Numero))
                 {
-                    var btnButaca = new Button
+                    bool estaOcupada = butacasOcupadas.Any(x => x.Fila == butaca.Fila && x.Numero == butaca.Numero);
+
+                    Button btnButaca = new Button
                     {
-                        Text = $"{butaca.Fila} - {butaca.Numero}",
+                        Text = $"{butaca.Fila}{butaca.Numero}",
                         Tag = butaca,
-                        Width = 40,
-                        Height = 40,
-                        BackColor = butaca.Disponible ? Color.LightGreen : Color.Red,
-                        Margin = new Padding(2)
+                        BackColor = estaOcupada ? Color.Red : Color.LightGreen,
+                        Width = 50,
+                        Height = 50,
+                        Margin = new Padding(5),
+                        Enabled = !estaOcupada,
+                        Font = new Font("Arial", 10, FontStyle.Bold)
                     };
 
                     btnButaca.Click += BtnButaca_Click;
                     panelButacas.Controls.Add(btnButaca);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar las butacas: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -161,39 +177,42 @@ namespace UI
         {
             if (!ValidarVenta())
                 return;
-
-            try
             {
-                foreach (BE_Butaca butaca in lstBxButacasSeleccionadas.Items)
+                try
                 {
+                    decimal total = decimal.Parse(lblTotal.Text.Replace("Total: $", "").Trim());
                     var boleto = new BE_Boleto
                     {
-                        IdFuncion = funcionSeleccionada.ID,
-                        IdCliente = clienteSeleccionado.ID,
+                        Funcion = funcionSeleccionada,
+                        Cliente = clienteSeleccionado,
                         FechaVenta = DateTime.Now,
-                        NumeroButaca = $"{butaca.Fila} - {butaca.Numero}"
+                        Butacas = lstBxButacasSeleccionadas.Items.Cast<BE_Butaca>().ToList(),
+                        Metodo = (BE_Boleto.MetodoPago)cmbxMetodoPago.SelectedItem,
+                        Precio = total
                     };
 
-                    if (gestorBoleto.Alta(boleto))
+                    gestorBoleto.Alta(boleto);
+
+                    foreach (BE_Butaca butaca in boleto.Butacas)
                     {
-                        gestorButaca.OcuparButaca(butaca, funcionSeleccionada);
+                        gestorButaca.OcuparButaca(butaca);
                     }
 
+                    MessageBox.Show("Venta completada con éxito", "Venta Exitosa",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    /*gestorBitacora.Log(usuarioActual, 
+                        $"Venta de {lstBxButacasSeleccionadas.Items.Count} butacas para la función: " +
+                        $"{funcionSeleccionada.PeliculaTitulo()} al cliente: {clienteSeleccionado.NombreCompleto()}");*/
+
+                    LimpiarForm();
                 }
 
-                MessageBox.Show("Venta completada con éxito", "Venta Exitosa",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                /*gestorBitacora.Log(usuarioActual, 
-                    $"Venta de {lstBxButacasSeleccionadas.Items.Count} butacas para la función: " +
-                    $"{funcionSeleccionada.PeliculaTitulo()} al cliente: {clienteSeleccionado.NombreCompleto()}");*/
-
-                LimpiarForm();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al procesar la venta: {ex.Message}", "Venta Fallo!",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al procesar la venta: {ex.Message}", "Venta Fallo!",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -226,17 +245,13 @@ namespace UI
         private void LimpiarForm()
         {
             txtClientDNI.Clear();
+            txtNombreCliente.Clear();
+            txtMembresiaCliente.Clear();
             clienteSeleccionado = null;
             funcionSeleccionada = null;
             lstBxButacasSeleccionadas.Items.Clear();
             lblTotal.Text = "Total: $0.00";
             CargarPeliculasDisponibles();
-        }
-
-        private void CargarEstadoInicial()
-        {
-            LimpiarForm();
-            btnCompletarVenta.Enabled = false;
         }
 
         private void btnNuevoCliente_Click(object sender, EventArgs e)
@@ -287,16 +302,22 @@ namespace UI
 
         private void CargarPeliculasDisponibles()
         {
-            dgvPeliculas.DataSource = gestorPelicula.ConsultarPeliculasConFuncionesDisponibles();
+            dgvPeliculas.DataSource = gestorPelicula.ConsultarPeliculasActivas();
         }
 
         private void dgvPeliculas_SelectionChanged(object sender, EventArgs e)
         {
-            if(dgvPeliculas.CurrentRow != null)
+            if (dgvPeliculas.CurrentRow != null)
             {
                 peliculaSeleccionada = (BE_Pelicula)dgvPeliculas.CurrentRow.DataBoundItem;
                 CargarFuncionesDisponibles(peliculaSeleccionada);
             }
+        }
+
+        private void CargarMetodosPago()
+        {
+            cmbxMetodoPago.DataSource = Enum.GetValues(typeof(BE_Boleto.MetodoPago));
+            cmbxMetodoPago.SelectedIndex = -0;
         }
     }
 }

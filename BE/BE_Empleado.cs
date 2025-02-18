@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    public class BE_Empleado : BE_EntidadBase
+    public class BE_Empleado
     {
+        public int ID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Nombre { get; set; }

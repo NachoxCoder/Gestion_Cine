@@ -6,27 +6,28 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    public class BE_OrdenCompra : BE_EntidadBase
+    public class BE_OrdenCompra
     {
         public BE_OrdenCompra()
         {
-            Detalles = new List<BE_DetalleOrdenCompra>();
+            Productos = new List<BE_Producto>();
             FechaOrdenCompra = DateTime.Now;
         }
-        public int IdProveedor { get; set; }
-        public string EstadoOrdenCompra { get; set; }
+
+        public int ID { get; set; }
         public DateTime FechaOrdenCompra { get; set; }
         public decimal TotalOrdenCompra { get; set; }
-        public virtual BE_Proveedor Proveedor { get; set; }
+        public BE_Proveedor Proveedor { get; set; }
+        public int CantidadProducto { get; set; }
 
-        public List<BE_DetalleOrdenCompra> Detalles { get; set; }
+        public List<BE_Producto> Productos { get; set; }
 
         public void CalcularTotal()
         {
             TotalOrdenCompra = 0;
-            foreach (var detalle in Detalles)
+            foreach (var producto in Productos)
             {
-                TotalOrdenCompra += detalle.Subtotal;
+                TotalOrdenCompra += producto.PrecioProducto * CantidadProducto;
             }
         }
     }

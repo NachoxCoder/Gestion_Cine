@@ -105,21 +105,21 @@
             // boletosToolStripMenuItem
             // 
             boletosToolStripMenuItem.Name = "boletosToolStripMenuItem";
-            boletosToolStripMenuItem.Size = new Size(224, 26);
+            boletosToolStripMenuItem.Size = new Size(191, 26);
             boletosToolStripMenuItem.Text = "Boletos";
             boletosToolStripMenuItem.Click += boletosToolStripMenuItem_Click;
             // 
             // membresiasToolStripMenuItem
             // 
             membresiasToolStripMenuItem.Name = "membresiasToolStripMenuItem";
-            membresiasToolStripMenuItem.Size = new Size(224, 26);
+            membresiasToolStripMenuItem.Size = new Size(191, 26);
             membresiasToolStripMenuItem.Text = "Membresias";
             membresiasToolStripMenuItem.Click += membresiasToolStripMenuItem_Click;
             // 
             // gestorClientesToolStripMenuItem
             // 
             gestorClientesToolStripMenuItem.Name = "gestorClientesToolStripMenuItem";
-            gestorClientesToolStripMenuItem.Size = new Size(224, 26);
+            gestorClientesToolStripMenuItem.Size = new Size(191, 26);
             gestorClientesToolStripMenuItem.Text = "Gestor Clientes";
             gestorClientesToolStripMenuItem.Click += gestorClientesToolStripMenuItem_Click;
             // 
@@ -142,6 +142,7 @@
             gestionDeSalasToolStripMenuItem.Name = "gestionDeSalasToolStripMenuItem";
             gestionDeSalasToolStripMenuItem.Size = new Size(303, 26);
             gestionDeSalasToolStripMenuItem.Text = "Gestion de Salas";
+            gestionDeSalasToolStripMenuItem.Click += gestionDeSalasToolStripMenuItem_Click;
             // 
             // dashboardToolStripMenuItem
             // 
@@ -186,6 +187,7 @@
             gestionDeInventarioToolStripMenuItem.Name = "gestionDeInventarioToolStripMenuItem";
             gestionDeInventarioToolStripMenuItem.Size = new Size(267, 26);
             gestionDeInventarioToolStripMenuItem.Text = "Gestion de Inventario";
+            gestionDeInventarioToolStripMenuItem.Click += gestionDeInventarioToolStripMenuItem_Click;
             // 
             // generarOrdenDeCompraToolStripMenuItem
             // 

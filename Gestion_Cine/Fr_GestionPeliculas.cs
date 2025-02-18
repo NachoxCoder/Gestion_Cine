@@ -30,94 +30,86 @@ namespace UI
             gestorSala = new BLL_Sala();
             //gestorBitacora = new BLL_Bitacora();
             //usuarioActual = usuario;
+            this.Load += Fr_GestionPeliculas_Load;
         }
 
         private void Fr_GestionPeliculas_Load(object sender, EventArgs e)
         {
-            CargarPeliculas();
+            peliculaSeleccionada = dgvPeliculas.CurrentRow?.DataBoundItem as BE_Pelicula;
+            RefrescarGrilla(dgvPeliculas, gestorPelicula.Consultar());
+            RefrescarGrilla(dgvFunciones, gestorFuncion.ConsultarFuncionesPorPelicula(peliculaSeleccionada));
             CargarSalas();
-            ConfigurarGrillas();
+
         }
 
-        private void CargarPeliculas()
+        private void btn_NuevaPelicula_Click(object sender, EventArgs e)
+        {
+            LimpiarFormularioPelicula();
+            chkPeliculaActiva.Checked = true;
+        }
+
+        private void btnGuardarPelicula_Click_1(object sender, EventArgs e)
         {
             try
             {
-                dgvPeliculas.DataSource = null;
-                dgvPeliculas.DataSource = gestorPelicula.ConsultarPeliculasActivas();
+                if (!ValidarPelicula()) return;
+                BE_Pelicula pelicula = new BE_Pelicula
+                {
+                    Titulo = txtTitulo.Text,
+                    Sinopsis = txtSinopsis.Text,
+                    Duracion = (int)numDuracion.Value,
+                    Rating = txtRating.Text,
+                    EstaActiva = chkPeliculaActiva.Checked
+                };
+
+                gestorPelicula.Alta(pelicula);
+                MessageBox.Show("Pelicula guardada correctamente");
+                RefrescarGrilla(dgvPeliculas, gestorPelicula.Consultar());
+                LimpiarFormularioPelicula();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error al guardar pelicula: {ex.Message}");
             }
-        }
-
-        private void CargarSalas()
-        {
-            try
-            {
-                cmbSala.DataSource = gestorSala.Consultar();
-                cmbSala.DisplayMember = "Nombre";
-                cmbSala.ValueMember = "ID";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void ConfigurarGrillas()
-        {
-            dgvFunciones.AutoGenerateColumns = false;
-            dgvFunciones.Columns.AddRange(new DataGridViewTextBoxColumn[]
-            {
-                new DataGridViewTextBoxColumn {Name = "Fecha", DataPropertyName = "FechaFuncion"},
-                new DataGridViewTextBoxColumn {Name = "Hora", DataPropertyName = "HoraFuncion"},
-                new DataGridViewTextBoxColumn {Name = "Sala", DataPropertyName = "SalaNombre"},
-                new DataGridViewTextBoxColumn {Name = "Precio", DataPropertyName = "Precio"},
-                new DataGridViewTextBoxColumn {Name = "Activa", DataPropertyName = "EstaActiva"}
-            });
-        }
-
-        private bool ValidarPelicula()
-        {
-            if (string.IsNullOrWhiteSpace(txtTitulo.Text))
-            {
-                MessageBox.Show("El título de la película es requerido");
-                return false;
-            }
-
-            if (numDuracion.Value <= 0)
-            {
-                MessageBox.Show("La duracion debe ser mayor a 0");
-                return false;
-            }
-
-            return true;
         }
 
         private void btnNuevaFuncion_Click(object sender, EventArgs e)
         {
+            LimpiarFormularioFuncion();
+            chkFuncionActiva.Checked = true;
+        }
+
+        private void btnGuardarFuncion_Click(object sender, EventArgs e)
+        {
             try
             {
-                if (ValidarDatosFuncion())
+                if (dgvPeliculas.Rows.Count == 0)
+                {
+                    throw new Exception("Debe seleccionar una película para agregar una función");
+                }
+
+                peliculaSeleccionada = (BE_Pelicula)dgvPeliculas.CurrentRow.DataBoundItem;
+
+                if (!ValidarDatosFuncion()) return;;
                 {
                     var nuevaFuncion = new BE_Funcion
                     {
-                        IdPelicula = peliculaSeleccionada.ID,
+                        Pelicula = peliculaSeleccionada,
                         FechaFuncion = dtpFecha.Value,
                         HoraInicio = dtpHoraInicio.Value.TimeOfDay,
                         HoraFin = dtpHoraFin.Value.TimeOfDay,
-                        IdSala = (int)cmbSala.SelectedValue,
+                        Sala = gestorSala.Consultar().FirstOrDefault(s => s.ID == (int)cmbSala.SelectedValue),
                         Precio = numPrecio.Value,
-                        EstaActiva = true
+                        EstaActiva = chkFuncionActiva.Checked,
                     };
 
-                    if (gestorFuncion.ValidarHorarios(nuevaFuncion) && gestorFuncion.Alta(nuevaFuncion))
+                    gestorFuncion.ValidarHorarios(nuevaFuncion);
+
+                    if (gestorFuncion.Alta(nuevaFuncion))
                     {
                         MessageBox.Show("Función guardada correctamente");
                         //gestorBitacora.Log(usuarioActual, $"Se guardó la función de la película: {peliculaSeleccionada.Titulo}");
-                        CargarFunciones();
+                        RefrescarGrilla(dgvFunciones, gestorFuncion.ConsultarFuncionesPorPelicula(peliculaSeleccionada));
                         LimpiarFormularioFuncion();
                     }
                 }
@@ -128,21 +120,24 @@ namespace UI
             }
         }
 
-        private void CargarFunciones()
-        {
-            if (peliculaSeleccionada != null)
-            {
-                dgvFunciones.DataSource = peliculaSeleccionada.Funciones;
-            }
-        }
-
         private void dgvPeliculas_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvPeliculas.CurrentRow != null)
             {
                 peliculaSeleccionada = (BE_Pelicula)dgvPeliculas.CurrentRow.DataBoundItem;
-                MostrarPelicula();
-                CargarFunciones();
+                if(peliculaSeleccionada != null)
+                {
+                    MostrarPelicula();
+                    RefrescarGrilla(dgvFunciones, gestorFuncion.ConsultarFuncionesPorPelicula(peliculaSeleccionada));
+                }
+            }
+        }
+
+        private void dgvFunciones_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvFunciones.CurrentRow != null)
+            {
+                MostrarFuncion();
             }
         }
 
@@ -152,7 +147,28 @@ namespace UI
             numDuracion.Value = peliculaSeleccionada.Duracion;
             txtSinopsis.Text = peliculaSeleccionada.Sinopsis;
             txtRating.Text = peliculaSeleccionada.Rating;
-            chkActiva.Checked = peliculaSeleccionada.EstaActiva;
+            chkPeliculaActiva.Checked = peliculaSeleccionada.EstaActiva;
+        }
+
+        private void MostrarFuncion()
+        {
+            if(dgvFunciones.CurrentRow == null)
+            {
+                return;
+            }
+            funcionSeleccionada = (BE_Funcion)dgvFunciones.CurrentRow.DataBoundItem;
+
+            if(funcionSeleccionada == null)
+            {
+                return;
+            }
+
+            dtpFecha.Value = funcionSeleccionada.FechaFuncion;
+            dtpHoraInicio.Value = DateTime.Today.Add(funcionSeleccionada.HoraInicio);
+            dtpHoraFin.Value = DateTime.Today.Add(funcionSeleccionada.HoraFin);
+            cmbSala.SelectedValue = funcionSeleccionada.Sala.ID;
+            numPrecio.Value = funcionSeleccionada.Precio;
+            chkFuncionActiva.Checked = funcionSeleccionada.EstaActiva;
         }
 
         private void LimpiarFormularioPelicula()
@@ -162,7 +178,7 @@ namespace UI
             numDuracion.Value = 0;
             txtSinopsis.Clear();
             txtRating.Clear();
-            chkActiva.Checked = true;
+            chkPeliculaActiva.Checked = false;
         }
 
         private void LimpiarFormularioFuncion()
@@ -171,6 +187,7 @@ namespace UI
             dtpHoraInicio.Value = DateTime.Now;
             cmbSala.SelectedIndex = 0;
             numPrecio.Value = 0;
+            chkFuncionActiva.Checked = false;
         }
 
         private void dtpHoraDesde_ValueChanged(object sender, EventArgs e)
@@ -196,13 +213,13 @@ namespace UI
                 peliculaSeleccionada.Sinopsis = txtSinopsis.Text;
                 peliculaSeleccionada.Duracion = (int)numDuracion.Value;
                 peliculaSeleccionada.Rating = txtRating.Text;
-                peliculaSeleccionada.EstaActiva = chkActiva.Checked;
+                peliculaSeleccionada.EstaActiva = chkPeliculaActiva.Checked;
 
                 if (gestorPelicula.Alta(peliculaSeleccionada))
                 {
                     MessageBox.Show("Pelicula modificada correctamente");
                     //gestorBitacora.Log(usuarioActual, $"Se modificó la película: {peliculaSeleccionada.Titulo}");
-                    CargarPeliculas();
+                    RefrescarGrilla(dgvPeliculas, gestorPelicula.Consultar());
                     LimpiarFormularioPelicula();
                 }
             }
@@ -229,7 +246,7 @@ namespace UI
                     {
                         MessageBox.Show("Película eliminada correctamente");
                         //gestorBitacora.Log(usuarioActual, $"Se eliminó la película: {peliculaSeleccionada.Titulo}");
-                        CargarPeliculas();
+                        RefrescarGrilla(dgvPeliculas, gestorPelicula.Consultar());
                         LimpiarFormularioPelicula();
                     }
                 }
@@ -253,14 +270,17 @@ namespace UI
                 funcionSeleccionada.FechaFuncion = dtpFecha.Value.Date;
                 funcionSeleccionada.HoraInicio = dtpHoraInicio.Value.TimeOfDay;
                 funcionSeleccionada.HoraFin = dtpHoraFin.Value.TimeOfDay;
-                funcionSeleccionada.IdSala = (int)cmbSala.SelectedValue;
+                funcionSeleccionada.Sala = gestorSala.Consultar().FirstOrDefault(s => s.ID == (int)cmbSala.SelectedValue);
                 funcionSeleccionada.Precio = numPrecio.Value;
+                funcionSeleccionada.EstaActiva = chkFuncionActiva.Checked;
 
-                if (gestorFuncion.ValidarHorarios(funcionSeleccionada) && gestorFuncion.Alta(funcionSeleccionada))
+                gestorFuncion.ValidarHorarios(funcionSeleccionada);
+
+                if (gestorFuncion.Modificar(funcionSeleccionada))
                 {
                     MessageBox.Show("Función modificada correctamente");
                     //gestorBitacora.Log(usuarioActual, $"Se modificó la función de la película: {peliculaSeleccionada.Titulo}");
-                    CargarFunciones();
+                    RefrescarGrilla(dgvFunciones, gestorFuncion.ConsultarFuncionesPorPelicula(peliculaSeleccionada));
                     LimpiarFormularioFuncion();
                 }
             }
@@ -287,7 +307,7 @@ namespace UI
                     {
                         MessageBox.Show("Función eliminada correctamente");
                         //gestorBitacora.Log(usuarioActual, $"Se eliminó la función de la película: {peliculaSeleccionada.Titulo}");
-                        CargarFunciones();
+                        RefrescarGrilla(dgvFunciones, gestorFuncion.ConsultarFuncionesPorPelicula(peliculaSeleccionada));
                         LimpiarFormularioFuncion();
                     }
                 }
@@ -312,7 +332,7 @@ namespace UI
                 return false;
             }
 
-            if (dtpHoraInicio.Value.TimeOfDay >= dtpHoraFin.Value.TimeOfDay)
+            if(dtpHoraInicio.Value.TimeOfDay >= dtpHoraFin.Value.TimeOfDay)
             {
                 MessageBox.Show("La hora de inicio debe ser menor a la hora de fin");
                 return false;
@@ -333,35 +353,50 @@ namespace UI
             return true;
         }
 
-        private void btnGuardarPelicula_Click_1(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!ValidarPelicula()) return;
-                BE_Pelicula pelicula = new BE_Pelicula
-                {
-                    Titulo = txtTitulo.Text,
-                    Sinopsis = txtSinopsis.Text,
-                    Duracion = (int)numDuracion.Value,
-                    Rating = txtRating.Text,
-                    EstaActiva = chkActiva.Checked
-                };
-
-                gestorPelicula.Alta(pelicula);
-                MessageBox.Show("Pelicula guardada correctamente");
-                RefrescarGrilla(dgvPeliculas, gestorPelicula.Consultar());
-                LimpiarFormularioPelicula();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al guardar pelicula: {ex.Message}");
-            }
-        }
 
         private void RefrescarGrilla(DataGridView pDgv, object pOrigen)
         {
             pDgv.DataSource = null;
             pDgv.DataSource = pOrigen;
+        }
+
+
+        private void CargarSalas()
+        {
+            try
+            {
+                var salas = gestorSala.Consultar();
+                cmbSala.DataSource = null;
+                cmbSala.DisplayMember = "Nombre";
+                cmbSala.ValueMember = "ID";
+                cmbSala.DataSource = salas;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private bool ValidarPelicula()
+        {
+            if (string.IsNullOrWhiteSpace(txtTitulo.Text))
+            {
+                MessageBox.Show("El título de la película es requerido");
+                return false;
+            }
+
+            if (numDuracion.Value <= 0)
+            {
+                MessageBox.Show("La duracion debe ser mayor a 0");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtSinopsis.Text))
+            {
+                throw new Exception("La sinopsis de la pelicula es requerida");
+            }
+
+            return true;
         }
     }
 }

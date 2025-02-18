@@ -11,10 +11,12 @@ namespace BLL
     public class BLL_Pelicula
     {
         private readonly MapperPelicula _mapperPelicula;
+        private readonly BLL_Funcion gestorFuncion;
 
         public BLL_Pelicula()
         {
             _mapperPelicula = new MapperPelicula();
+            gestorFuncion = new BLL_Funcion();
         }
 
         public bool Alta(BE_Pelicula pelicula)
@@ -39,6 +41,14 @@ namespace BLL
                 {
                     return false;
                 }
+
+                //Elimino las funciones asociadas a la pelicula
+                var funcionesAsociadas = gestorFuncion.ConsultarFuncionesPorPelicula(pelicula);
+                foreach (var funcion in funcionesAsociadas)
+                {
+                    gestorFuncion.Baja(funcion);
+                }
+
                 _mapperPelicula.Baja(pelicula);
                 return true;
             }
@@ -69,11 +79,6 @@ namespace BLL
         public List<BE_Pelicula> ConsultarPeliculasActivas()
         {
             return _mapperPelicula.Consultar().Where(x => x.EstaActiva).ToList();
-        }
-
-        public List<BE_Pelicula> ConsultarPeliculasConFuncionesDisponibles()
-        {
-            return ConsultarPeliculasActivas().Where(x => x.Funciones.Any(y => y.EstaActiva && y.AsientosDisponibles() > 0)).ToList();
         }
 
         public BE_Pelicula ObtenerporId(int id)

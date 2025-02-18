@@ -19,7 +19,6 @@ namespace BLL
 
         public void Alta(BE_Sala sala)
         {
-            ValidarSala(sala);
             _mapperSala.Alta(sala);
         }
 
@@ -48,7 +47,6 @@ namespace BLL
                 return false;
             }
 
-            ValidarSala(sala);
             _mapperSala.Modificar(sala);
             return true;
         }
@@ -58,23 +56,9 @@ namespace BLL
             return _mapperSala.Consultar();
         }
 
-        private void ValidarSala(BE_Sala sala)
+        public void ModificarButaca(BE_Butaca butaca)
         {
-            if(string.IsNullOrWhiteSpace(sala.Nombre))
-            {
-                throw new Exception("El nombre de la sala es obligatorio");
-            }
-
-            if (sala.Capacidad <= 0)
-            {
-                throw new Exception("La capacidad de la sala debe ser mayor a 0");
-            }
-
-            var salaExistente = _mapperSala.ObtenerPorNombre(sala.Nombre);
-            if (salaExistente != null && salaExistente.ID != sala.ID)
-            {
-                throw new Exception("Ya existe una sala con ese nombre");
-            }
+            _mapperSala.ModificarButaca(butaca);
         }
     }
 }

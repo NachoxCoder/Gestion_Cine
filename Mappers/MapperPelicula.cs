@@ -19,10 +19,23 @@ namespace Mappers
 
         public void Alta(BE_Pelicula pelicula)
         {
-            var peliculas = _dalXml.LeerXml<BE_Pelicula>();
-            pelicula.ID = peliculas.Any() ? peliculas.Max(x => x.ID) + 1 : 1;
-            peliculas.Add(pelicula);
-            _dalXml.GuardarXml(peliculas);
+            try
+            {
+                var peliculas = _dalXml.LeerXml<BE_Pelicula>();
+                if(peliculas.Any(p => p.Titulo == pelicula.Titulo))
+                {
+                    throw new Exception("Ya existe una pelicula con ese titulo");
+                }
+                pelicula.ID = peliculas.Any() ? peliculas.Max(x => x.ID) + 1 : 1;
+                peliculas.Add(pelicula);
+                _dalXml.GuardarXml(peliculas);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"Error al guardar la pelicula: {ex.Message}", ex);
+            }
+
         }
 
         public void Baja(BE_Pelicula pelicula)

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    public class BE_Configuracion : BE_EntidadBase
+    public class BE_Configuracion
     {
+        public int ID { get; set; }
         public string Clave { get; set; }
         public string Valor { get; set; }
         public string Descripcion { get; set; }

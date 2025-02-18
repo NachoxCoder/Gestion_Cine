@@ -12,6 +12,8 @@ namespace BE
     {
         public BE_Membresia()
         {
+            Cliente = new BE_Cliente();
+            EstaActiva = true;
         }
         public int ID { get; set; }
         public DateTime FechaInicio { get; set; }

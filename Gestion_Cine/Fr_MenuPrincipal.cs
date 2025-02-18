@@ -101,5 +101,17 @@ namespace Gestion_Cine
             var form = new Fr_GestionPeliculas();
             CargarForm(form);
         }
+
+        private void gestionDeSalasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new Fr_GestionSalas();
+            CargarForm(form);
+        }
+
+        private void gestionDeInventarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new Fr_GestionInventario();
+            CargarForm(form);
+        }
     }
 }

@@ -17,25 +17,14 @@ namespace BLL
             _mapperBoleto = new MapperBoleto();
         }
 
-        public bool Alta(BE_Boleto boleto)
+        public void Alta(BE_Boleto boleto)
         {
-            try
-            {
-                if(boleto.ID == 0)
-                {
-                    _mapperBoleto.Alta(boleto);
-                }
-                else
-                {
-                    _mapperBoleto.Modificar(boleto);
-                }
-                return true;
-            }
-            catch (Exception)
-            {
+            _mapperBoleto.Alta(boleto);
+        }
 
-                return false;
-            }
+        public List<BE_Boleto> Consultar()
+        {
+            return _mapperBoleto.Consultar();
         }
     }
 }

@@ -35,7 +35,8 @@
             btnGuardarPelicula = new Button();
             btnEliminarPelicula = new Button();
             groupBox1 = new GroupBox();
-            chkActiva = new CheckBox();
+            btn_NuevaPelicula = new Button();
+            chkPeliculaActiva = new CheckBox();
             numDuracion = new NumericUpDown();
             txtSinopsis = new TextBox();
             txtTitulo = new TextBox();
@@ -45,6 +46,8 @@
             label1 = new Label();
             btnModificarPelicula = new Button();
             groupBox2 = new GroupBox();
+            btnNuevaFuncion = new Button();
+            chkFuncionActiva = new CheckBox();
             dtpHoraFin = new DateTimePicker();
             dtpHoraInicio = new DateTimePicker();
             dtpFecha = new DateTimePicker();
@@ -57,7 +60,7 @@
             label6 = new Label();
             btnEliminarFuncion = new Button();
             btnModificarFuncion = new Button();
-            btnNuevaFuncion = new Button();
+            btnGuardarFuncion = new Button();
             txtRating = new TextBox();
             pnlTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPeliculas).BeginInit();
@@ -104,6 +107,7 @@
             dgvPeliculas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvPeliculas.Size = new Size(665, 377);
             dgvPeliculas.TabIndex = 3;
+            dgvPeliculas.SelectionChanged += dgvPeliculas_SelectionChanged;
             // 
             // dgvFunciones
             // 
@@ -118,6 +122,7 @@
             dgvFunciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvFunciones.Size = new Size(623, 377);
             dgvFunciones.TabIndex = 4;
+            dgvFunciones.SelectionChanged += dgvFunciones_SelectionChanged;
             // 
             // btnGuardarPelicula
             // 
@@ -125,11 +130,11 @@
             btnGuardarPelicula.FlatStyle = FlatStyle.Flat;
             btnGuardarPelicula.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnGuardarPelicula.ForeColor = Color.White;
-            btnGuardarPelicula.Location = new Point(12, 564);
+            btnGuardarPelicula.Location = new Point(166, 564);
             btnGuardarPelicula.Name = "btnGuardarPelicula";
-            btnGuardarPelicula.Size = new Size(190, 40);
+            btnGuardarPelicula.Size = new Size(151, 40);
             btnGuardarPelicula.TabIndex = 7;
-            btnGuardarPelicula.Text = "GUARDAR PELICULA";
+            btnGuardarPelicula.Text = "Guardar Pelicula";
             btnGuardarPelicula.UseVisualStyleBackColor = false;
             btnGuardarPelicula.Click += btnGuardarPelicula_Click_1;
             // 
@@ -139,17 +144,18 @@
             btnEliminarPelicula.FlatStyle = FlatStyle.Flat;
             btnEliminarPelicula.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnEliminarPelicula.ForeColor = Color.White;
-            btnEliminarPelicula.Location = new Point(481, 564);
+            btnEliminarPelicula.Location = new Point(524, 563);
             btnEliminarPelicula.Name = "btnEliminarPelicula";
-            btnEliminarPelicula.Size = new Size(190, 40);
+            btnEliminarPelicula.Size = new Size(155, 40);
             btnEliminarPelicula.TabIndex = 8;
-            btnEliminarPelicula.Text = "ELIMINAR PELICULA";
+            btnEliminarPelicula.Text = "Eliminar Pelicula";
             btnEliminarPelicula.UseVisualStyleBackColor = false;
             btnEliminarPelicula.Click += btnEliminarPelicula_Click;
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(chkActiva);
+            groupBox1.Controls.Add(btn_NuevaPelicula);
+            groupBox1.Controls.Add(chkPeliculaActiva);
             groupBox1.Controls.Add(numDuracion);
             groupBox1.Controls.Add(txtSinopsis);
             groupBox1.Controls.Add(txtTitulo);
@@ -168,29 +174,46 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Peliculas";
             // 
-            // chkActiva
+            // btn_NuevaPelicula
             // 
-            chkActiva.AutoSize = true;
-            chkActiva.Location = new Point(554, 528);
-            chkActiva.Name = "chkActiva";
-            chkActiva.Size = new Size(72, 24);
-            chkActiva.TabIndex = 18;
-            chkActiva.Text = "Activa";
-            chkActiva.UseVisualStyleBackColor = true;
+            btn_NuevaPelicula.BackColor = Color.Sienna;
+            btn_NuevaPelicula.FlatStyle = FlatStyle.Flat;
+            btn_NuevaPelicula.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btn_NuevaPelicula.ForeColor = Color.White;
+            btn_NuevaPelicula.Location = new Point(12, 564);
+            btn_NuevaPelicula.Name = "btn_NuevaPelicula";
+            btn_NuevaPelicula.Size = new Size(137, 40);
+            btn_NuevaPelicula.TabIndex = 19;
+            btn_NuevaPelicula.Text = "Nueva Pelicula";
+            btn_NuevaPelicula.UseVisualStyleBackColor = false;
+            btn_NuevaPelicula.Click += btn_NuevaPelicula_Click;
+            // 
+            // chkPeliculaActiva
+            // 
+            chkPeliculaActiva.AutoSize = true;
+            chkPeliculaActiva.Checked = true;
+            chkPeliculaActiva.CheckState = CheckState.Checked;
+            chkPeliculaActiva.Location = new Point(554, 528);
+            chkPeliculaActiva.Name = "chkPeliculaActiva";
+            chkPeliculaActiva.Size = new Size(72, 24);
+            chkPeliculaActiva.TabIndex = 18;
+            chkPeliculaActiva.Text = "Activa";
+            chkPeliculaActiva.UseVisualStyleBackColor = true;
             // 
             // numDuracion
             // 
             numDuracion.Location = new Point(86, 521);
+            numDuracion.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numDuracion.Name = "numDuracion";
             numDuracion.Size = new Size(150, 27);
             numDuracion.TabIndex = 17;
             // 
             // txtSinopsis
             // 
-            txtSinopsis.Location = new Point(86, 462);
+            txtSinopsis.Location = new Point(86, 449);
             txtSinopsis.Multiline = true;
             txtSinopsis.Name = "txtSinopsis";
-            txtSinopsis.Size = new Size(569, 53);
+            txtSinopsis.Size = new Size(569, 66);
             txtSinopsis.TabIndex = 16;
             // 
             // txtTitulo
@@ -221,7 +244,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 470);
+            label2.Location = new Point(12, 452);
             label2.Name = "label2";
             label2.Size = new Size(63, 20);
             label2.TabIndex = 11;
@@ -242,16 +265,18 @@
             btnModificarPelicula.FlatStyle = FlatStyle.Flat;
             btnModificarPelicula.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnModificarPelicula.ForeColor = Color.White;
-            btnModificarPelicula.Location = new Point(238, 564);
+            btnModificarPelicula.Location = new Point(338, 564);
             btnModificarPelicula.Name = "btnModificarPelicula";
-            btnModificarPelicula.Size = new Size(205, 40);
+            btnModificarPelicula.Size = new Size(166, 40);
             btnModificarPelicula.TabIndex = 9;
-            btnModificarPelicula.Text = "MODIFICAR PELICULA";
+            btnModificarPelicula.Text = "Modificar Pelicula";
             btnModificarPelicula.UseVisualStyleBackColor = false;
             btnModificarPelicula.Click += btnModificarPelicula_Click;
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(btnNuevaFuncion);
+            groupBox2.Controls.Add(chkFuncionActiva);
             groupBox2.Controls.Add(dtpHoraFin);
             groupBox2.Controls.Add(dtpHoraInicio);
             groupBox2.Controls.Add(dtpFecha);
@@ -264,7 +289,7 @@
             groupBox2.Controls.Add(label6);
             groupBox2.Controls.Add(btnEliminarFuncion);
             groupBox2.Controls.Add(btnModificarFuncion);
-            groupBox2.Controls.Add(btnNuevaFuncion);
+            groupBox2.Controls.Add(btnGuardarFuncion);
             groupBox2.Controls.Add(dgvFunciones);
             groupBox2.Location = new Point(691, 66);
             groupBox2.Name = "groupBox2";
@@ -273,11 +298,37 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Funciones";
             // 
+            // btnNuevaFuncion
+            // 
+            btnNuevaFuncion.BackColor = Color.Sienna;
+            btnNuevaFuncion.FlatStyle = FlatStyle.Flat;
+            btnNuevaFuncion.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnNuevaFuncion.ForeColor = Color.White;
+            btnNuevaFuncion.Location = new Point(13, 564);
+            btnNuevaFuncion.Name = "btnNuevaFuncion";
+            btnNuevaFuncion.Size = new Size(137, 40);
+            btnNuevaFuncion.TabIndex = 22;
+            btnNuevaFuncion.Text = "Nueva Funcion";
+            btnNuevaFuncion.UseVisualStyleBackColor = false;
+            btnNuevaFuncion.Click += btnNuevaFuncion_Click;
+            // 
+            // chkFuncionActiva
+            // 
+            chkFuncionActiva.AutoSize = true;
+            chkFuncionActiva.Checked = true;
+            chkFuncionActiva.CheckState = CheckState.Checked;
+            chkFuncionActiva.Location = new Point(564, 502);
+            chkFuncionActiva.Name = "chkFuncionActiva";
+            chkFuncionActiva.Size = new Size(72, 24);
+            chkFuncionActiva.TabIndex = 20;
+            chkFuncionActiva.Text = "Activa";
+            chkFuncionActiva.UseVisualStyleBackColor = true;
+            // 
             // dtpHoraFin
             // 
             dtpHoraFin.CustomFormat = "HH:mm";
             dtpHoraFin.Format = DateTimePickerFormat.Custom;
-            dtpHoraFin.Location = new Point(551, 419);
+            dtpHoraFin.Location = new Point(532, 420);
             dtpHoraFin.Name = "dtpHoraFin";
             dtpHoraFin.ShowUpDown = true;
             dtpHoraFin.Size = new Size(85, 27);
@@ -287,7 +338,7 @@
             // 
             dtpHoraInicio.CustomFormat = "HH:mm";
             dtpHoraInicio.Format = DateTimePickerFormat.Custom;
-            dtpHoraInicio.Location = new Point(328, 419);
+            dtpHoraInicio.Location = new Point(322, 420);
             dtpHoraInicio.Name = "dtpHoraInicio";
             dtpHoraInicio.ShowUpDown = true;
             dtpHoraInicio.Size = new Size(85, 27);
@@ -304,7 +355,8 @@
             // 
             // numPrecio
             // 
-            numPrecio.Location = new Point(398, 502);
+            numPrecio.Location = new Point(366, 502);
+            numPrecio.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
             numPrecio.Name = "numPrecio";
             numPrecio.Size = new Size(160, 27);
             numPrecio.TabIndex = 18;
@@ -312,7 +364,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(326, 505);
+            label10.Location = new Point(309, 505);
             label10.Name = "label10";
             label10.Size = new Size(50, 20);
             label10.TabIndex = 17;
@@ -368,11 +420,11 @@
             btnEliminarFuncion.FlatStyle = FlatStyle.Flat;
             btnEliminarFuncion.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnEliminarFuncion.ForeColor = Color.White;
-            btnEliminarFuncion.Location = new Point(449, 563);
+            btnEliminarFuncion.Location = new Point(492, 563);
             btnEliminarFuncion.Name = "btnEliminarFuncion";
-            btnEliminarFuncion.Size = new Size(190, 40);
+            btnEliminarFuncion.Size = new Size(156, 40);
             btnEliminarFuncion.TabIndex = 10;
-            btnEliminarFuncion.Text = "ELIMINAR FUNCION";
+            btnEliminarFuncion.Text = "Eliminar Funcion";
             btnEliminarFuncion.UseVisualStyleBackColor = false;
             btnEliminarFuncion.Click += btnEliminarFuncion_Click;
             // 
@@ -382,27 +434,27 @@
             btnModificarFuncion.FlatStyle = FlatStyle.Flat;
             btnModificarFuncion.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnModificarFuncion.ForeColor = Color.White;
-            btnModificarFuncion.Location = new Point(228, 563);
+            btnModificarFuncion.Location = new Point(319, 564);
             btnModificarFuncion.Name = "btnModificarFuncion";
-            btnModificarFuncion.Size = new Size(201, 40);
+            btnModificarFuncion.Size = new Size(167, 40);
             btnModificarFuncion.TabIndex = 11;
-            btnModificarFuncion.Text = "MODIFICAR FUNCION";
+            btnModificarFuncion.Text = "Modificar Funcion";
             btnModificarFuncion.UseVisualStyleBackColor = false;
             btnModificarFuncion.Click += btnModificarFuncion_Click;
             // 
-            // btnNuevaFuncion
+            // btnGuardarFuncion
             // 
-            btnNuevaFuncion.BackColor = Color.Sienna;
-            btnNuevaFuncion.FlatStyle = FlatStyle.Flat;
-            btnNuevaFuncion.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnNuevaFuncion.ForeColor = Color.White;
-            btnNuevaFuncion.Location = new Point(13, 563);
-            btnNuevaFuncion.Name = "btnNuevaFuncion";
-            btnNuevaFuncion.Size = new Size(190, 40);
-            btnNuevaFuncion.TabIndex = 10;
-            btnNuevaFuncion.Text = "CREAR FUNCION";
-            btnNuevaFuncion.UseVisualStyleBackColor = false;
-            btnNuevaFuncion.Click += btnNuevaFuncion_Click;
+            btnGuardarFuncion.BackColor = Color.Sienna;
+            btnGuardarFuncion.FlatStyle = FlatStyle.Flat;
+            btnGuardarFuncion.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnGuardarFuncion.ForeColor = Color.White;
+            btnGuardarFuncion.Location = new Point(160, 564);
+            btnGuardarFuncion.Name = "btnGuardarFuncion";
+            btnGuardarFuncion.Size = new Size(153, 40);
+            btnGuardarFuncion.TabIndex = 10;
+            btnGuardarFuncion.Text = "Guardar Funcion";
+            btnGuardarFuncion.UseVisualStyleBackColor = false;
+            btnGuardarFuncion.Click += btnGuardarFuncion_Click;
             // 
             // txtRating
             // 
@@ -452,7 +504,7 @@
         private GroupBox groupBox2;
         private Button btnEliminarFuncion;
         private Button btnModificarFuncion;
-        private Button btnNuevaFuncion;
+        private Button btnGuardarFuncion;
         private Label label5;
         private Label label4;
         private Label label3;
@@ -465,7 +517,7 @@
         private Label label9;
         private ComboBox cmbSala;
         private Label label8;
-        private CheckBox chkActiva;
+        private CheckBox chkPeliculaActiva;
         private NumericUpDown numDuracion;
         private TextBox txtSinopsis;
         private TextBox txtTitulo;
@@ -473,5 +525,8 @@
         private DateTimePicker dtpHoraInicio;
         private DateTimePicker dtpFecha;
         private DateTimePicker dtpHoraFin;
+        private Button btn_NuevaPelicula;
+        private CheckBox chkFuncionActiva;
+        private Button btnNuevaFuncion;
     }
 }

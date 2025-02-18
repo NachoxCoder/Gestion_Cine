@@ -55,6 +55,8 @@
             dgvPeliculas = new DataGridView();
             btnNuevoCliente = new Button();
             btnMembresia = new Button();
+            cmbxMetodoPago = new ComboBox();
+            label3 = new Label();
             pnlTop.SuspendLayout();
             grpClient.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvFunciones).BeginInit();
@@ -68,7 +70,7 @@
             pnlTop.Dock = DockStyle.Top;
             pnlTop.Location = new Point(0, 0);
             pnlTop.Name = "pnlTop";
-            pnlTop.Size = new Size(1094, 60);
+            pnlTop.Size = new Size(1320, 60);
             pnlTop.TabIndex = 0;
             // 
             // lblTitle
@@ -79,7 +81,7 @@
             lblTitle.ForeColor = Color.White;
             lblTitle.Location = new Point(0, 0);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(1094, 60);
+            lblTitle.Size = new Size(1320, 60);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "VENTA DE BOLETOS";
             lblTitle.TextAlign = ContentAlignment.MiddleCenter;
@@ -152,33 +154,34 @@
             // 
             dgvFunciones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvFunciones.ColumnHeadersHeight = 29;
-            dgvFunciones.Location = new Point(469, 184);
+            dgvFunciones.Location = new Point(693, 184);
             dgvFunciones.MultiSelect = false;
             dgvFunciones.Name = "dgvFunciones";
             dgvFunciones.RowHeadersWidth = 51;
             dgvFunciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvFunciones.Size = new Size(600, 200);
             dgvFunciones.TabIndex = 2;
+            dgvFunciones.SelectionChanged += dgvFunciones_SelectionChanged;
             // 
             // panelButacas
             // 
             panelButacas.BorderStyle = BorderStyle.FixedSingle;
             panelButacas.Location = new Point(12, 390);
             panelButacas.Name = "panelButacas";
-            panelButacas.Size = new Size(595, 177);
+            panelButacas.Size = new Size(1074, 395);
             panelButacas.TabIndex = 3;
             // 
             // lstBxButacasSeleccionadas
             // 
-            lstBxButacasSeleccionadas.Location = new Point(879, 390);
+            lstBxButacasSeleccionadas.Location = new Point(1103, 394);
             lstBxButacasSeleccionadas.Name = "lstBxButacasSeleccionadas";
-            lstBxButacasSeleccionadas.Size = new Size(190, 144);
+            lstBxButacasSeleccionadas.Size = new Size(190, 204);
             lstBxButacasSeleccionadas.TabIndex = 4;
             // 
             // lblTotal
             // 
             lblTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblTotal.Location = new Point(879, 537);
+            lblTotal.Location = new Point(1103, 608);
             lblTotal.Name = "lblTotal";
             lblTotal.Size = new Size(190, 30);
             lblTotal.TabIndex = 5;
@@ -191,12 +194,13 @@
             btnCompletarVenta.FlatStyle = FlatStyle.Flat;
             btnCompletarVenta.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCompletarVenta.ForeColor = Color.White;
-            btnCompletarVenta.Location = new Point(631, 527);
+            btnCompletarVenta.Location = new Point(1103, 745);
             btnCompletarVenta.Name = "btnCompletarVenta";
             btnCompletarVenta.Size = new Size(190, 40);
             btnCompletarVenta.TabIndex = 6;
             btnCompletarVenta.Text = "COMPLETAR VENTA";
             btnCompletarVenta.UseVisualStyleBackColor = false;
+            btnCompletarVenta.Click += btnCompletarVenta_Click;
             // 
             // dgvPeliculas
             // 
@@ -206,7 +210,7 @@
             dgvPeliculas.Name = "dgvPeliculas";
             dgvPeliculas.RowHeadersWidth = 51;
             dgvPeliculas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPeliculas.Size = new Size(442, 200);
+            dgvPeliculas.Size = new Size(642, 200);
             dgvPeliculas.TabIndex = 7;
             dgvPeliculas.SelectionChanged += dgvPeliculas_SelectionChanged;
             // 
@@ -236,11 +240,30 @@
             btnMembresia.UseVisualStyleBackColor = false;
             btnMembresia.Click += btnMembresia_Click;
             // 
+            // cmbxMetodoPago
+            // 
+            cmbxMetodoPago.FormattingEnabled = true;
+            cmbxMetodoPago.Location = new Point(1103, 679);
+            cmbxMetodoPago.Name = "cmbxMetodoPago";
+            cmbxMetodoPago.Size = new Size(181, 28);
+            cmbxMetodoPago.TabIndex = 10;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(1103, 656);
+            label3.Name = "label3";
+            label3.Size = new Size(120, 20);
+            label3.TabIndex = 11;
+            label3.Text = "Metodo de Pago";
+            // 
             // Fr_VentaBoletos
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1094, 610);
+            ClientSize = new Size(1320, 833);
+            Controls.Add(label3);
+            Controls.Add(cmbxMetodoPago);
             Controls.Add(btnMembresia);
             Controls.Add(btnNuevoCliente);
             Controls.Add(dgvPeliculas);
@@ -259,6 +282,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvFunciones).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvPeliculas).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -270,5 +294,7 @@
         private TextBox txtMembresiaCliente;
         private Button btnNuevoCliente;
         private Button btnMembresia;
+        private ComboBox cmbxMetodoPago;
+        private Label label3;
     }
 }

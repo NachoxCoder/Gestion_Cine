@@ -9,15 +9,13 @@ namespace BE
      public class BE_Butaca
     {
         public int ID { get; set; }
-        public BE_Sala Sala { get; set; }
         public string Fila { get; set; }
         public int Numero { get; set; }
         public bool Disponible { get; set; }
-        public int IdSala { get; set; }
+        public BE_Sala Sala { get; set; }
 
         public BE_Butaca()
         {
-            Sala = new BE_Sala();
         }
 
         public override string ToString()

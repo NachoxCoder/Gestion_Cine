@@ -8,6 +8,7 @@ namespace BE
         public BE_Cliente()
         {
             Boletos = new List<BE_Boleto>();
+            Membresia = null;
         }
         public int ID { get; set; }
         public string Nombre { get; set; }

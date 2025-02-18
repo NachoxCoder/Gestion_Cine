@@ -8,11 +8,26 @@ namespace BE
 {
     public class BE_Boleto
     {
+        public BE_Boleto()
+        {
+            Butacas = new List<BE_Butaca>();
+        }
+
         public int ID { get; set; }
-        public int IdCliente { get; set; }
-        public int IdFuncion { get; set; }
+        public BE_Cliente Cliente { get; set; }
+        public BE_Funcion Funcion { get; set; }
         public DateTime FechaVenta { get; set; }
         public decimal Precio { get; set; }
-        public string NumeroButaca { get; set; }
+        public List <BE_Butaca> Butacas { get; set; }
+        public MetodoPago Metodo { get; set; }
+
+        public enum MetodoPago
+        {
+            Efectivo,
+            TarjetaDebito,
+            TarjetaCredito,
+            CodigoQR,
+            Transferencia
+        }
     }
 }

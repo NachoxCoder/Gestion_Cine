@@ -23,34 +23,29 @@ namespace Mappers
         {
             List<BE_Membresia> membresias = _dalXml.LeerXml<BE_Membresia>();
             membresia.ID = membresias.Any() ? membresias.Max(x => x.ID) + 1 : 1;
+            membresia.Cliente = membresia.Cliente;
             membresias.Add(membresia);
             _dalXml.GuardarXml(membresias);
+
+            _mapperCliente.ActualizarMembresia(membresia.Cliente.ID, membresia);
         }
 
         public void Baja(BE_Membresia membresia)
         {
             List<BE_Membresia> membresias = _dalXml.LeerXml<BE_Membresia>();
             var membresiaEncontrada = membresias.Find(x => x.ID == membresia.ID);
-            membresias.Remove(membresiaEncontrada);
-            _dalXml.GuardarXml(membresias);
+            if (membresiaEncontrada != null)
+            {
+                membresias.Remove(membresiaEncontrada);
+                _dalXml.GuardarXml(membresias);
+
+                _mapperCliente.ActualizarMembresia(membresia.Cliente.ID, null);
+            }
         }
 
         public List<BE_Membresia> Consultar()
         {
-            var membresias = _dalXml.LeerXml<BE_Membresia>();
-            var clientes = _mapperCliente.Consultar();
-
-            foreach (var membresia in membresias)
-            {
-                BE_Cliente? clienteEncontrado;
-                clienteEncontrado = clientes.Find(x => x.ID == membresia.Cliente.ID);
-                if(clienteEncontrado == null)
-                {
-                    throw new Exception("No se encontro el cliente de la membresia" + membresia.ID);
-                }
-                membresia.Cliente = clienteEncontrado;
-            }
-            return membresias;
+            return _dalXml.LeerXml<BE_Membresia>();
         }
 
         public void Modificar(BE_Membresia membresia)
@@ -63,6 +58,8 @@ namespace Mappers
                 membresiaExistente.EstaActiva = membresia.EstaActiva;
                 membresiaExistente.Tipo = membresia.Tipo;
                 _dalXml.GuardarXml(membresias);
+
+                _mapperCliente.ActualizarMembresia(membresia.Cliente.ID, membresia);
             }
         }
     }
