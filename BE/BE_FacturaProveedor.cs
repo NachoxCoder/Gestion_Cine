@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,13 +10,12 @@ namespace BE
 {
     public class BE_FacturaProveedor
     {
+        [Browsable(false)]
         public int ID { get; set; }
         public string NumeroFactura{ get; set; }
-        public BE_Cliente Cliente { get; set; }
-        public string TipoFactura { get; set; }
-        public decimal Subtotal { get; set; }
-        public decimal Total { get; set; }
-        public decimal IVA { get; set; }
+        [Browsable(false)]
+        public BE_Proveedor Proveedor { get; set; }
+        public decimal Monto { get; set; }
         public DateTime FechaEmision { get; set; }
         public string MetodoPago { get; set; }
         public bool EstaPagada { get; set; }
@@ -26,7 +26,7 @@ namespace BE
 
         public override string ToString()
         {
-            return $"Factura N° {NumeroFactura} - {FechaEmision:dd/MM/yyyy} - Total: ${Total:N2}";
+            return $"Factura N° {NumeroFactura} - {FechaEmision:dd/MM/yyyy} - Total: ${Monto:N2}";
         }
     }
 }

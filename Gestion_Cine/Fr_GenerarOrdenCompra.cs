@@ -14,198 +14,208 @@ namespace UI
 {
     public partial class Fr_GenerarOrdenCompra : Form
     {
-        private readonly BLL_OrdenCompra gestorOrdenCompra;
-        private readonly BLL_Proveedor gestorProveedor;
-        private readonly BLL_Producto gestorProducto;
-        private readonly BLL_Bitacora gestorBitacora;
-        private readonly BE_Empleado usuarioActual;
-        private BE_OrdenCompra ordenCompraActual;
-        private List<BE_DetalleOrdenCompra> detallesOrden;
+        private Dictionary<BE_Producto, int> productosCantidad;
+        private readonly BLL_OrdenCompra _gestorOrdenCompra;
+        private readonly BLL_Proveedor _gestorProveedor;
+        private readonly BLL_Producto _gestorProducto;
 
-        public Fr_GenerarOrdenCompra(BE_Empleado usuario)
+        public Fr_GenerarOrdenCompra()
         {
             InitializeComponent();
-            gestorOrdenCompra = new BLL_OrdenCompra();
-            gestorProveedor = new BLL_Proveedor();
-            gestorProducto = new BLL_Producto();
-            gestorBitacora = new BLL_Bitacora();
-            usuarioActual = usuario;
-            detallesOrden = new List<BE_DetalleOrdenCompra>();
+            _gestorOrdenCompra = new BLL_OrdenCompra();
+            _gestorProveedor = new BLL_Proveedor();
+            _gestorProducto = new BLL_Producto();
+            productosCantidad = new Dictionary<BE_Producto, int>();
         }
 
         private void Fr_GenerarOrdenCompra_Load(object sender, EventArgs e)
         {
-            ConfigurarGrillas();
             CargarProveedores();
-            CargarProductos();
-            InicializarOrdenCompra();
-        }
-
-        private void ConfigurarGrillas()
-        {
-            dgvDetalles.AutoGenerateColumns = false;
-            dgvDetalles.Columns.AddRange(new DataGridViewColumn[]
-            {
-                new DataGridViewTextBoxColumn
-                {
-                    Name = "Producto",
-                    DataPropertyName = "NombreProducto",
-                    HeaderText = "Producto"
-                },
-                new DataGridViewTextBoxColumn
-                {
-                    Name = "Cantidad",
-                    DataPropertyName = "Cantidad",
-                    HeaderText = "Cantidad"
-                },
-                new DataGridViewTextBoxColumn
-                {
-                    Name = "PrecioUnitario",
-                    DataPropertyName = "PrecioUnitario",
-                    HeaderText = "Precio Unitario"
-                },
-                new DataGridViewTextBoxColumn
-                {
-                    Name = "Subtotal",
-                    DataPropertyName = "Subtotal",
-                    HeaderText = "Subtotal"
-                }
-            });
+            ActualizarTotal();
         }
 
         private void CargarProveedores()
         {
-            cmbProveedor.DataSource = gestorProveedor.ListarProveedoresActivos();
-            cmbProveedor.DisplayMember = "RazonSocial";
-            cmbProveedor.ValueMember = "ID";
-        }
-
-        private void CargarProductos()
-        {
-            cmbProducto.DataSource = gestorProducto.Consultar();
-            cmbProducto.DisplayMember = "NombreProducto";
-            cmbProducto.ValueMember = "ID";
-        }
-
-        private void InicializarOrdenCompra()
-        {
-            ordenCompraActual = new BE_OrdenCompra
+            try
             {
-                FechaOrdenCompra = DateTime.Now,
-                Detalles = new List<BE_DetalleOrdenCompra>()
-            };
+                var proveedores = _gestorProveedor.ConsultarProveedoresActivos();
+                cmbProveedor.DataSource = null;
+                cmbProveedor.DisplayMember = "RazonSocial";
+                cmbProveedor.ValueMember = "ID";
+                cmbProveedor.DataSource = proveedores;
+
+                if (proveedores.Any())
+                {
+                    cmbProveedor.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar proveedores: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void cmbProveedor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                var proveedor = cmbProveedor.SelectedItem as BE_Proveedor;
+                if (proveedor != null && proveedor.Productos != null)
+                {
+                    var productos = proveedor.Productos.Where(x => x.EstaActivo).ToList();
+                    cmbProducto.DataSource = null;
+                    cmbProducto.DisplayMember = "NombreProducto";
+                    cmbProducto.ValueMember = "ID";
+                    cmbProducto.DataSource = productos;
+
+                    if (cmbProducto.Items.Count > 0)
+                    {
+                        cmbProducto.SelectedIndex = 0;
+                    }
+                }
+                else
+                {
+                    cmbProducto.DataSource = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar productos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnAgregarProducto_Click(object sender, EventArgs e)
         {
             try
             {
-                if (!ValidarDetalle()) return;
-
-                var producto = (BE_Producto)cmbProducto.SelectedItem;
-                var detalle = new BE_DetalleOrdenCompra
+                if (cmbProducto.SelectedItem == null)
                 {
-                    IdProducto = producto.ID,
-                    Producto = producto,
-                    Cantidad = (int)numCantidad.Value,
-                    PrecioUnitario = numPrecioUnitario.Value
-                };
+                    MessageBox.Show("Debe seleccionar un producto", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                detallesOrden.Add(detalle);
-                ActualizarGrilla();
-                LimpiarForm();
+                if (numCantidad.Value <= 0)
+                {
+                    MessageBox.Show("La cantidad debe ser mayor a cero", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var producto = cmbProducto.SelectedItem as BE_Producto;
+                int cantidad = (int)numCantidad.Value;
+
+                if (producto != null)
+                {
+                    if (productosCantidad.ContainsKey(producto))
+                    {
+                        productosCantidad[producto] += cantidad;
+                    }
+                    else
+                    {
+                        productosCantidad.Add(producto, cantidad);
+                    }
+                }
+
+                RefrescarGrilla();
+                ActualizarTotal();
+                numCantidad.Value = 0;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-
+                MessageBox.Show($"Error al agregar producto: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private bool ValidarDetalle()
+        private void RefrescarGrilla()
         {
-            if (cmbProducto.SelectedItem == null)
-            {
-                MessageBox.Show("Debe seleccionar un producto");
-                return false;
-            }
-
-            if (numCantidad.Value <= 0)
-            {
-                MessageBox.Show("La cantidad debe ser mayor a 0");
-                return false;
-            }
-
-            if (numPrecioUnitario.Value <= 0)
-            {
-                MessageBox.Show("El precio unitario debe ser mayor a 0");
-                return false;
-            }
-
-            return true;
-        }
-
-        private void ActualizarGrilla()
-        {
-            dgvDetalles.DataSource = null;
-            dgvDetalles.DataSource = detallesOrden;
-
-            lblTotal.Text = $"Total: ${detallesOrden.Sum(x => x.Subtotal):N2}";
-        }
-
-        private void LimpiarForm()
-        {
-            cmbProducto.SelectedIndex = -1;
-            numCantidad.Value = 0;
-            numPrecioUnitario.Value = 0;
+            dgvOrdenCompra.DataSource = null;
+            dgvOrdenCompra.DataSource = productosCantidad.Select(x => new { ProductoNombre = x.Key.NombreProducto,
+                PrecioUnitario = x.Key.PrecioProducto,Cantidad = x.Value, Subtotal = x.Key.PrecioProducto * x.Value}).ToList();
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             try
             {
-                if (!ValidarOrden()) return;
-
-                ordenCompraActual.IdProveedor = (int)cmbProveedor.SelectedValue;
-                ordenCompraActual.Proveedor = (BE_Proveedor)cmbProveedor.SelectedItem;
-                ordenCompraActual.Detalles = detallesOrden;
-                ordenCompraActual.TotalOrdenCompra = detallesOrden.Sum(x => x.Subtotal);
-
-                if (gestorOrdenCompra.Guardar(ordenCompraActual))
+                if (productosCantidad.Count == 0)
                 {
-                    MessageBox.Show("Orden de compra guardada correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    gestorBitacora.Log(usuarioActual, $"Genero Orden de Compra: {ordenCompraActual.ID}");
-                    LimpiarForm();
-                    InicializarOrdenCompra();
-                    ActualizarGrilla();
+                    MessageBox.Show("Debe agregar al menos un producto", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (cmbProveedor.SelectedItem == null)
+                {
+                    MessageBox.Show("Debe seleccionar un proveedor", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var ordenCompra = new BE_OrdenCompra();
+                ordenCompra.Proveedor = cmbProveedor.SelectedItem as BE_Proveedor;
+                ordenCompra.Items = new List<ItemOrdenCompra>();
+                foreach (var kvp in productosCantidad)
+                {
+                    ordenCompra.Items.Add(new ItemOrdenCompra { Producto = kvp.Key, Cantidad = kvp.Value });
+                }
+                ordenCompra.FechaOrdenCompra = DateTime.Now;
+                _gestorOrdenCompra.Alta(ordenCompra);
+
+                MessageBox.Show("Orden de compra generada correctamente", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimpiarFormulario();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar la orden de compra: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ActualizarTotal()
+        {
+            decimal total = 0;
+            foreach (var item in productosCantidad)
+            {
+                total += item.Key.PrecioProducto * item.Value;
+            }
+            lblTotal.Text = $"Total: {total:N2}";
+        }
+
+        private void LimpiarFormulario()
+        {
+            productosCantidad.Clear();
+            dgvOrdenCompra.DataSource = null;
+            numCantidad.Value = 0;
+            if (cmbProveedor.Items.Count > 0)
+            {
+                cmbProveedor.SelectedIndex = 0;
+            }
+            RefrescarGrilla();
+            ActualizarTotal();
+        }
+
+        private void btnRemover_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if(dgvOrdenCompra.CurrentRow == null || dgvOrdenCompra.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Debe seleccionar un producto para remover", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string nombreProducto = dgvOrdenCompra.CurrentRow.Cells["ProductoNombre"].Value.ToString();
+
+                var productoRemover = productosCantidad.Keys.FirstOrDefault(x => x.NombreProducto == nombreProducto);
+
+                if(productoRemover != null)
+                {
+                    productosCantidad.Remove(productoRemover);
+                    RefrescarGrilla();
+                    ActualizarTotal();
+                    MessageBox.Show("Producto removido correctamente", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error al remover producto: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private bool ValidarOrden()
-        {
-            if (cmbProveedor.SelectedIndex == null)
-            {
-                MessageBox.Show("Debe seleccionar un proveedor");
-                return false;
-            }
-
-            if (!detallesOrden.Any())
-            {
-                MessageBox.Show("Debe agregar al menos un producto a la orden de compra");
-                return false;
-            }
-
-            return true;
-        }
-
-        private void numCantidad_ValueChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

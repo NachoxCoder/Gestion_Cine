@@ -23,11 +23,8 @@ namespace Mappers
         {
             List<BE_Membresia> membresias = _dalXml.LeerXml<BE_Membresia>();
             membresia.ID = membresias.Any() ? membresias.Max(x => x.ID) + 1 : 1;
-            membresia.Cliente = membresia.Cliente;
             membresias.Add(membresia);
             _dalXml.GuardarXml(membresias);
-
-            _mapperCliente.ActualizarMembresia(membresia.Cliente.ID, membresia);
         }
 
         public void Baja(BE_Membresia membresia)
@@ -38,8 +35,6 @@ namespace Mappers
             {
                 membresias.Remove(membresiaEncontrada);
                 _dalXml.GuardarXml(membresias);
-
-                _mapperCliente.ActualizarMembresia(membresia.Cliente.ID, null);
             }
         }
 
@@ -58,8 +53,6 @@ namespace Mappers
                 membresiaExistente.EstaActiva = membresia.EstaActiva;
                 membresiaExistente.Tipo = membresia.Tipo;
                 _dalXml.GuardarXml(membresias);
-
-                _mapperCliente.ActualizarMembresia(membresia.Cliente.ID, membresia);
             }
         }
     }

@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "Gestion_Cine\UI.csproj", "{41E05022-47BF-4E1C-AC4B-031325E03D1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "Gestion_Cine\UI.csproj", "{41E05022-47BF-4E1C-AC4B-031325E03D1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{34355C30-7A7F-40DD-BC18-70FD277EDF4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{34355C30-7A7F-40DD-BC18-70FD277EDF4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BE", "BE\BE.csproj", "{834C060A-664E-4DAB-98C9-F35A9A52DB97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BE", "BE\BE.csproj", "{834C060A-664E-4DAB-98C9-F35A9A52DB97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mappers", "Mappers\Mappers.csproj", "{29D6723E-BCE8-4550-AAC8-EB87752362EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mappers", "Mappers\Mappers.csproj", "{29D6723E-BCE8-4550-AAC8-EB87752362EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{C936FD3D-EDB7-493D-8A8F-B5C1C785BFB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{C936FD3D-EDB7-493D-8A8F-B5C1C785BFB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Servicio", "Servicio\Servicio.csproj", "{509D5BEA-CB79-4C38-9163-68E5055EA7F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{C936FD3D-EDB7-493D-8A8F-B5C1C785BFB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C936FD3D-EDB7-493D-8A8F-B5C1C785BFB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C936FD3D-EDB7-493D-8A8F-B5C1C785BFB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{509D5BEA-CB79-4C38-9163-68E5055EA7F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{509D5BEA-CB79-4C38-9163-68E5055EA7F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{509D5BEA-CB79-4C38-9163-68E5055EA7F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{509D5BEA-CB79-4C38-9163-68E5055EA7F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

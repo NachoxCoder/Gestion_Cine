@@ -39,14 +39,15 @@
             lblCantidad = new Label();
             numCantidad = new NumericUpDown();
             btnAgregarProducto = new Button();
-            dgvDetalles = new DataGridView();
+            dgvOrdenCompra = new DataGridView();
             lblTotal = new Label();
             btnGuardar = new Button();
+            btnRemover = new Button();
             pnlTop.SuspendLayout();
             grpProveedor.SuspendLayout();
             grpProducto.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numCantidad).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dgvDetalles).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvOrdenCompra).BeginInit();
             SuspendLayout();
             // 
             // pnlTop
@@ -97,9 +98,11 @@
             cmbProveedor.Name = "cmbProveedor";
             cmbProveedor.Size = new Size(300, 28);
             cmbProveedor.TabIndex = 1;
+            cmbProveedor.SelectedIndexChanged += cmbProveedor_SelectedIndexChanged;
             // 
             // grpProducto
             // 
+            grpProducto.Controls.Add(btnRemover);
             grpProducto.Controls.Add(lblProducto);
             grpProducto.Controls.Add(cmbProducto);
             grpProducto.Controls.Add(lblCantidad);
@@ -141,11 +144,11 @@
             numCantidad.Name = "numCantidad";
             numCantidad.Size = new Size(120, 27);
             numCantidad.TabIndex = 3;
-            numCantidad.ValueChanged += numCantidad_ValueChanged;
             // 
             // btnAgregarProducto
             // 
             btnAgregarProducto.BackColor = Color.FromArgb(10, 18, 80);
+            btnAgregarProducto.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnAgregarProducto.ForeColor = Color.White;
             btnAgregarProducto.Location = new Point(486, 70);
             btnAgregarProducto.Name = "btnAgregarProducto";
@@ -155,19 +158,20 @@
             btnAgregarProducto.UseVisualStyleBackColor = false;
             btnAgregarProducto.Click += btnAgregarProducto_Click;
             // 
-            // dgvDetalles
+            // dgvOrdenCompra
             // 
-            dgvDetalles.AllowUserToAddRows = false;
-            dgvDetalles.AllowUserToDeleteRows = false;
-            dgvDetalles.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvDetalles.ColumnHeadersHeight = 29;
-            dgvDetalles.Location = new Point(12, 290);
-            dgvDetalles.Name = "dgvDetalles";
-            dgvDetalles.ReadOnly = true;
-            dgvDetalles.RowHeadersWidth = 51;
-            dgvDetalles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDetalles.Size = new Size(776, 200);
-            dgvDetalles.TabIndex = 3;
+            dgvOrdenCompra.AllowUserToAddRows = false;
+            dgvOrdenCompra.AllowUserToDeleteRows = false;
+            dgvOrdenCompra.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvOrdenCompra.ColumnHeadersHeight = 29;
+            dgvOrdenCompra.Location = new Point(12, 290);
+            dgvOrdenCompra.MultiSelect = false;
+            dgvOrdenCompra.Name = "dgvOrdenCompra";
+            dgvOrdenCompra.ReadOnly = true;
+            dgvOrdenCompra.RowHeadersWidth = 51;
+            dgvOrdenCompra.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvOrdenCompra.Size = new Size(776, 200);
+            dgvOrdenCompra.TabIndex = 3;
             // 
             // lblTotal
             // 
@@ -191,6 +195,19 @@
             btnGuardar.UseVisualStyleBackColor = false;
             btnGuardar.Click += btnGuardar_Click;
             // 
+            // btnRemover
+            // 
+            btnRemover.BackColor = Color.Red;
+            btnRemover.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnRemover.ForeColor = Color.White;
+            btnRemover.Location = new Point(625, 70);
+            btnRemover.Name = "btnRemover";
+            btnRemover.Size = new Size(120, 34);
+            btnRemover.TabIndex = 7;
+            btnRemover.Text = "Remover";
+            btnRemover.UseVisualStyleBackColor = false;
+            btnRemover.Click += btnRemover_Click;
+            // 
             // Fr_GenerarOrdenCompra
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -199,7 +216,7 @@
             Controls.Add(pnlTop);
             Controls.Add(grpProveedor);
             Controls.Add(grpProducto);
-            Controls.Add(dgvDetalles);
+            Controls.Add(dgvOrdenCompra);
             Controls.Add(lblTotal);
             Controls.Add(btnGuardar);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -207,11 +224,12 @@
             Name = "Fr_GenerarOrdenCompra";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Fr_GenerarOrdenCompra";
+            Load += Fr_GenerarOrdenCompra_Load;
             pnlTop.ResumeLayout(false);
             grpProveedor.ResumeLayout(false);
             grpProducto.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)numCantidad).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvDetalles).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvOrdenCompra).EndInit();
             ResumeLayout(false);
         }
 
@@ -226,10 +244,12 @@
         private Label lblCantidad;
         private NumericUpDown numCantidad;
         private Button btnAgregarProducto;
-        private DataGridView dgvDetalles;
+        private DataGridView dgvOrdenCompra;
         private Label lblTotal;
         private Button btnGuardar;
 
         #endregion
+
+        private Button btnRemover;
     }
 }

@@ -15,7 +15,7 @@ namespace Gestion_Cine
 {
     public partial class Fr_MenuPrincipal : Form
     {
-        private BE_Empleado usuarioActual;
+        private BE_Usuario usuarioActual;
         //private readonly BLL_Permiso gestorPermiso;
         //private readonly BLL_Bitacora gestorBitacora;
         public Fr_MenuPrincipal()
@@ -111,6 +111,30 @@ namespace Gestion_Cine
         private void gestionDeInventarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var form = new Fr_GestionInventario();
+            CargarForm(form);
+        }
+
+        private void generarOrdenDeCompraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new Fr_GenerarOrdenCompra();
+            CargarForm(form);
+        }
+
+        private void gestionDeFacturasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new Fr_GestionFacturas();
+            CargarForm(form);
+        }
+
+        private void dashboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new Fr_Dashboard();
+            CargarForm(form);
+        }
+
+        private void gestionDeEmpleadosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new Fr_GestionUsuarios();
             CargarForm(form);
         }
     }

@@ -149,6 +149,7 @@
             dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
             dashboardToolStripMenuItem.Size = new Size(303, 26);
             dashboardToolStripMenuItem.Text = "Dashboard";
+            dashboardToolStripMenuItem.Click += dashboardToolStripMenuItem_Click;
             // 
             // sistemaToolStripMenuItem
             // 
@@ -162,6 +163,7 @@
             gestionDeEmpleadosToolStripMenuItem.Name = "gestionDeEmpleadosToolStripMenuItem";
             gestionDeEmpleadosToolStripMenuItem.Size = new Size(276, 26);
             gestionDeEmpleadosToolStripMenuItem.Text = "Gestion de Empleados";
+            gestionDeEmpleadosToolStripMenuItem.Click += gestionDeEmpleadosToolStripMenuItem_Click;
             // 
             // gestionDePermisosYRolesToolStripMenuItem
             // 
@@ -194,12 +196,14 @@
             generarOrdenDeCompraToolStripMenuItem.Name = "generarOrdenDeCompraToolStripMenuItem";
             generarOrdenDeCompraToolStripMenuItem.Size = new Size(267, 26);
             generarOrdenDeCompraToolStripMenuItem.Text = "Generar Orden de Compra";
+            generarOrdenDeCompraToolStripMenuItem.Click += generarOrdenDeCompraToolStripMenuItem_Click;
             // 
             // gestionDeFacturasToolStripMenuItem
             // 
             gestionDeFacturasToolStripMenuItem.Name = "gestionDeFacturasToolStripMenuItem";
             gestionDeFacturasToolStripMenuItem.Size = new Size(267, 26);
             gestionDeFacturasToolStripMenuItem.Text = "Gestion de Facturas";
+            gestionDeFacturasToolStripMenuItem.Click += gestionDeFacturasToolStripMenuItem_Click;
             // 
             // Fr_MenuPrincipal
             // 

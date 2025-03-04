@@ -11,14 +11,14 @@ namespace BE
         public int ID { get; set; }
         public DateTime Fecha { get; set; }
         public string Evento { get; set; }
-        public BE_Empleado UsuarioEmpleado { get; set; }
+        public BE_Usuario UsuarioEmpleado { get; set; }
 
         public BE_Bitacora()
         {
             Fecha = DateTime.Now;
             Evento = string.Empty;
         }
-        public BE_Bitacora(DateTime fecha, string evento, BE_Empleado usuarioEmpleado)
+        public BE_Bitacora(DateTime fecha, string evento, BE_Usuario usuarioEmpleado)
         {
             Fecha = fecha;
             Evento = evento;

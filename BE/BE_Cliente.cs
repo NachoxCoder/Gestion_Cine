@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.ComponentModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace BE
@@ -8,8 +9,9 @@ namespace BE
         public BE_Cliente()
         {
             Boletos = new List<BE_Boleto>();
-            Membresia = null;
         }
+
+        [Browsable(false)]
         public int ID { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
@@ -18,7 +20,6 @@ namespace BE
         public string Telefono { get; set; }
         public string Direccion { get; set; }
         public DateTime FechaNacimiento { get; set; }
-        public BE_Membresia Membresia { get; set; }
         public List<BE_Boleto> Boletos { get; set; }
         public string NombreCompleto()
         {
@@ -28,15 +29,6 @@ namespace BE
         public int Edad()
         {
             return DateTime.Today.Year - FechaNacimiento.Year;
-        }
-        
-        public TipoMembresia? DevuelveMembresiaTipo()
-        {
-            return Membresia?.Tipo;
-        }
-        public bool TieneMembresia()
-        {
-            return Membresia != null && Membresia.EstaActiva;
         }
     }
 }

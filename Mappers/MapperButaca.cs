@@ -19,7 +19,7 @@ namespace Mappers
 
         public void Alta(BE.BE_Butaca butaca)
         {
-            var butacas = _dalXml.LeerXml<BE.BE_Butaca>();
+            var butacas = _dalXml.LeerXml<BE_Butaca>();
             butaca.ID = butacas.Any() ? butacas.Max(x => x.ID) + 1 : 1;
             butacas.Add(butaca);
             _dalXml.GuardarXml(butacas);
@@ -27,7 +27,7 @@ namespace Mappers
 
         public void Baja(BE.BE_Butaca butaca)
         {
-            var butacas = _dalXml.LeerXml<BE.BE_Butaca>();
+            var butacas = _dalXml.LeerXml<BE_Butaca>();
             var butacaEncontrada = butacas.Find(x => x.ID == butaca.ID);
             butacas.Remove(butacaEncontrada);
             _dalXml.GuardarXml(butacas);

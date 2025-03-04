@@ -18,7 +18,7 @@ namespace UI
         private readonly BLL_Funcion gestorFuncion;
         private readonly BLL_Sala gestorSala;
         //private readonly BLL_Bitacora gestorBitacora;
-        private BE_Empleado usuarioActual;
+        private BE_Usuario usuarioActual;
         private BE_Pelicula peliculaSeleccionada;
         private BE_Funcion funcionSeleccionada;
 
@@ -215,7 +215,7 @@ namespace UI
                 peliculaSeleccionada.Rating = txtRating.Text;
                 peliculaSeleccionada.EstaActiva = chkPeliculaActiva.Checked;
 
-                if (gestorPelicula.Alta(peliculaSeleccionada))
+                if (gestorPelicula.Modificar(peliculaSeleccionada))
                 {
                     MessageBox.Show("Pelicula modificada correctamente");
                     //gestorBitacora.Log(usuarioActual, $"Se modificó la película: {peliculaSeleccionada.Titulo}");

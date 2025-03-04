@@ -22,10 +22,11 @@ namespace UI
         private readonly BLL_Butaca gestorButaca;
         //private readonly BLL_Bitacora gestorBitacora;
         private readonly BLL_Boleto gestorBoleto;
+        private readonly BLL_Membresia gestorMembresia;
         private BE_Cliente clienteSeleccionado;
         private BE_Funcion funcionSeleccionada;
         private BE_Pelicula peliculaSeleccionada;
-        private BE_Empleado usuarioActual;
+        private BE_Usuario usuarioActual;
         public Fr_VentaBoletos()
         {
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace UI
             gestorButaca = new BLL_Butaca();
             //gestorBitacora = new BLL_Bitacora();
             gestorBoleto = new BLL_Boleto();
+            gestorMembresia = new BLL_Membresia();
             //usuarioActual = usuario;
             this.Load += Fr_VentaBoletos_Load;
         }
@@ -154,22 +156,33 @@ namespace UI
 
         private void ActualizarTotal()
         {
-            decimal total = funcionSeleccionada.Precio * lstBxButacasSeleccionadas.Items.Count;
-            if (clienteSeleccionado?.TieneMembresia() == true)
+            if(funcionSeleccionada == null || lstBxButacasSeleccionadas.Items.Count == 0)
             {
-                switch (clienteSeleccionado.DevuelveMembresiaTipo())
+                lblTotal.Text = "Total: $0.00";
+                return;
+            }
+            decimal total = funcionSeleccionada.Precio * lstBxButacasSeleccionadas.Items.Count;
+
+            if (clienteSeleccionado != null)
+            {
+                var membresiaEncontrada = gestorMembresia.ConsultarPorCliente(clienteSeleccionado.ID).FirstOrDefault(x => x.EstaActiva);
+                if (membresiaEncontrada != null)
                 {
-                    case TipoMembresia.Plata:
-                        total *= 0.9m;
-                        break;
-                    case TipoMembresia.Oro:
-                        total *= 0.8m;
-                        break;
-                    case TipoMembresia.Premium:
-                        total *= 0.7m;
-                        break;
+                    switch (membresiaEncontrada.Tipo)
+                    {
+                        case TipoMembresia.Plata:
+                            total *= 0.9m;
+                            break;
+                        case TipoMembresia.Oro:
+                            total *= 0.8m;
+                            break;
+                        case TipoMembresia.Premium:
+                            total *= 0.7m;
+                            break;
+                    }
                 }
             }
+
             lblTotal.Text = $"Total: ${total:N2}";
         }
 
@@ -268,6 +281,10 @@ namespace UI
 
         private void btnBuscarCliente_Click_1(object sender, EventArgs e)
         {
+            funcionSeleccionada = null;
+            lstBxButacasSeleccionadas.Items.Clear();
+            lblTotal.Text = "Total: $0.00";
+
             if (string.IsNullOrWhiteSpace(txtClientDNI.Text))
             {
                 MessageBox.Show("Debe ingresar un DNI", "Campo Requerido",
@@ -294,9 +311,10 @@ namespace UI
         {
             if (clienteSeleccionado != null)
             {
+                var membresiaEncontrada = gestorMembresia.ConsultarPorCliente(clienteSeleccionado.ID).FirstOrDefault(x => x.EstaActiva);
+
                 txtNombreCliente.Text = clienteSeleccionado.NombreCompleto();
-                txtMembresiaCliente.Text = clienteSeleccionado.TieneMembresia() ?
-                    clienteSeleccionado.DevuelveMembresiaTipo().ToString() : "Ninguna";
+                txtMembresiaCliente.Text = membresiaEncontrada != null ? membresiaEncontrada.Tipo.ToString() : "Ninguna";
             }
         }
 

@@ -25,17 +25,6 @@ namespace Mappers
             _dalXml.GuardarXml(clientes);
         }
 
-        public void ActualizarMembresia(int clienteId, BE_Membresia membresia) 
-        {
-            var clientes = _dalXml.LeerXml<BE_Cliente>();
-            var clienteEncontrado = clientes.FirstOrDefault(x => x.ID == clienteId);
-            if (clienteEncontrado != null)
-            {
-                clienteEncontrado.Membresia = membresia;
-                _dalXml.GuardarXml(clientes);
-            }
-        }
-
         public void Baja(BE_Cliente cliente)
         {
             List<BE_Cliente> clientes = _dalXml.LeerXml<BE_Cliente>();
@@ -55,7 +44,6 @@ namespace Mappers
             clienteEncontrado.Email = cliente.Email;
             clienteEncontrado.Telefono = cliente.Telefono;
             clienteEncontrado.Direccion = cliente.Direccion;
-            clienteEncontrado.Membresia = cliente.Membresia;
             _dalXml.GuardarXml(clientes);
         }
 

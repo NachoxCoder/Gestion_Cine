@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using System.ComponentModel;
 
 namespace BE
 {
@@ -10,25 +12,55 @@ namespace BE
     {
         public BE_OrdenCompra()
         {
-            Productos = new List<BE_Producto>();
+            Items = new List<ItemOrdenCompra>();
+            Facturas = new List<BE_FacturaProveedor>();
             FechaOrdenCompra = DateTime.Now;
         }
-
+        [Browsable(false)]
         public int ID { get; set; }
         public DateTime FechaOrdenCompra { get; set; }
-        public decimal TotalOrdenCompra { get; set; }
-        public BE_Proveedor Proveedor { get; set; }
-        public int CantidadProducto { get; set; }
-
-        public List<BE_Producto> Productos { get; set; }
-
-        public void CalcularTotal()
+        [XmlIgnore]
+        public decimal TotalOrdenCompra
         {
-            TotalOrdenCompra = 0;
-            foreach (var producto in Productos)
+            get
             {
-                TotalOrdenCompra += producto.PrecioProducto * CantidadProducto;
+                decimal total = 0;
+                foreach (var item in Items)
+                {
+                    total += item.Producto.PrecioProducto * item.Cantidad;
+                }
+                return total;
             }
         }
+        public BE_Proveedor Proveedor { get; set; }
+        public List<BE_FacturaProveedor> Facturas { get; set; }
+        public List<ItemOrdenCompra> Items { get; set; }
+        [XmlIgnore]
+        public Dictionary<BE_Producto, int> ProductosCantidad
+        {
+            get
+            {
+                var dic = new Dictionary<BE_Producto, int>();
+                foreach (var item in Items)
+                {
+                    dic[item.Producto] = item.Cantidad;
+                }
+                return dic;
+            }
+            set
+            {
+                Items = new List<ItemOrdenCompra>();
+                foreach (var kvp in value)
+                {
+                    Items.Add(new ItemOrdenCompra { Producto = kvp.Key, Cantidad = kvp.Value });
+                }
+            }
+        }
+    }
+
+    public class ItemOrdenCompra
+    {
+        public BE_Producto Producto { get; set; }
+        public int Cantidad { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace BE
         {
         }
 
+        [Browsable(false)]
         public int ID { get; set; }
         public string NombreProducto { get; set; }
         public string DescripcionProducto { get; set; }

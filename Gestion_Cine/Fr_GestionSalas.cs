@@ -17,7 +17,7 @@ namespace UI
         private readonly BLL_Sala gestorSala;
         //private readonly BLL_Bitacora gestorBitacora;
         private readonly BLL_Butaca gestorButaca;
-        private BE_Empleado usuarioActual;
+        private BE_Usuario usuarioActual;
         private BE_Sala salaSeleccionada;
         public Fr_GestionSalas()
         {

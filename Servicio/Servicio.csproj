@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Mappers\Mappers.csproj" />
-    <ProjectReference Include="..\Servicio\Servicio.csproj" />
-  </ItemGroup>
-
 </Project>

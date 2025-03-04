@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace BE
             EstaActiva = true;
         }
 
+        [Browsable(false)]
         public int ID { get; set; }
         public DateTime FechaFuncion { get; set; }
         public TimeSpan HoraInicio { get; set; }

@@ -19,7 +19,7 @@ namespace UI
         //private readonly BLL_Bitacora gestorBitacora;
         private BE_Cliente clienteSeleccionado;
         private BE_Membresia membresiaSeleccionada;
-        private BE_Empleado usuarioActual;
+        private BE_Usuario usuarioActual;
 
         public Fr_GestionMembresia()
         {

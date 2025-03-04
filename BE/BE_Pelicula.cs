@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,9 @@ namespace BE
         { 
             EstaActiva = true;
         }
+
         //Propiedades de la clase
+        [Browsable(false)]
         public int ID { get; set; }
         public string Titulo { get; set; }
         public string Sinopsis { get; set; }

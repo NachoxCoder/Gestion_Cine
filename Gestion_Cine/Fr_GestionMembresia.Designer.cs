@@ -55,7 +55,7 @@
             pnlTop.Dock = DockStyle.Top;
             pnlTop.Location = new Point(0, 0);
             pnlTop.Name = "pnlTop";
-            pnlTop.Size = new Size(1000, 60);
+            pnlTop.Size = new Size(995, 60);
             pnlTop.TabIndex = 0;
             // 
             // lblTitle
@@ -66,7 +66,7 @@
             lblTitle.ForeColor = Color.White;
             lblTitle.Location = new Point(0, 0);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(1000, 60);
+            lblTitle.Size = new Size(995, 60);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "GESTIÓN DE MEMBRESÍAS";
             lblTitle.TextAlign = ContentAlignment.MiddleCenter;
@@ -195,7 +195,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1000, 378);
+            ClientSize = new Size(995, 381);
             Controls.Add(pnlTop);
             Controls.Add(grpCliente);
             Controls.Add(grpMembresia);

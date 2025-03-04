@@ -46,5 +46,10 @@ namespace BLL
         {
             return _mapperProducto.ConsultarPorID(id);
         }
+
+        public List<BE_Producto> ListarProductosBajoStock()
+        {
+            return ConsultarConStockBajo();
+        }
     }
 }
